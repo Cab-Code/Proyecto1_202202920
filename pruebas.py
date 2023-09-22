@@ -19,4 +19,8 @@ for alumno in alumnos:
 
 print(alumnos[i])
 
+alumno = alumnos[i]
+
+print(alumno[1])
+
     
