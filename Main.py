@@ -1,5 +1,7 @@
 import tkinter as tk
 from tkinter import ttk 
+import subprocess
+
 
 #Paleta de Colores
 BGclr = '#fef6cd'
@@ -37,39 +39,31 @@ def Inicio (iniSecion):
     btnAlumno.pack(pady = 10)
     iniSecion.update()
 
-def acceso(data, dat1, dat2, dat3):
-    usuarios = []
-    sesion = []
-    # Obtener los datos
-    with open(f'{data}') as BD:
-        lectura = BD.read()
+def acceso(tipo, dat1, dat2, dat3):
+    datosAlumno = []
+    if tipo == 'alumno':
+        BaseDatos = F'Datos/Alumnos/{dat1}.txt'
+        try:
+            data = open(BaseDatos)
+            alumno = data.read()
+            alumno= alumno.split('///')
+            datosAlumno = alumno[0].split(',')
+            print(alumno)
+            print(datosAlumno)
 
-        Datos = lectura.split('\n')
-        for elemento in Datos:
-            
-            usuario = elemento.split('-')
-            usuarios.append(usuario)
-    #busqueda de usuario y compara
-    #comparacion de valores
-    i = 0
-    for usuario in usuarios:
-        if usuario[0] != dat1:
-            i+=1
-        elif usuario[0] == dat1:
-            break
+            data.close()
+        except:
+            print('Sin datos')
+            subprocess.run(['python', 'Pantallas/error.py', '404', f'usuario {dat1} no registrado'])
         
-    print(i, len(usuarios))
-    if i < len(usuarios):
-        sesion = usuarios[i]
-        if sesion[2] == dat2 and sesion[3] == dat3:
-            print('Accesando a la pagina')
-        else:
-            print('Acceso Denegado: Los datos que esta ingresando no son los asociados al DPI o Carnet')
-    else:
-        print('El Carnet o DPI no esta registrado')
-
-    print(sesion)
-
+        if datosAlumno[6] == dat2 and datosAlumno[8] == dat3:
+            print('aceso concedido')
+            subprocess.run(['python', 'Pantallas/vistaAlumno.py', datosAlumno[0]])
+        
+    elif tipo == 'profesor':
+        print('profesor')
+    elif tipo == 'admin':
+        print('admin')
 
 
 def getUserData (tipo, paramUno, paramDos, paramTres):
@@ -79,7 +73,7 @@ def getUserData (tipo, paramUno, paramDos, paramTres):
         password = paramTres.get()
         print(carnet, userName, password)
 
-        acceso('data.txt', carnet, userName, password)
+        acceso(tipo, carnet, userName, password)
 
     elif tipo == 'profesor':
         Dpi = paramUno.get()

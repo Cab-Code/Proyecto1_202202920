@@ -1,6 +1,9 @@
 import tkinter as tk
 import subprocess
-
+import sys
+argumentos = sys.argv
+print(len(argumentos))
+print(argumentos[len(argumentos) - 1])
 colorDos = '#9dc09d'
 colorUno = '#9dc09d'
 
@@ -23,8 +26,10 @@ vista.title('Alumno')
 vista. geometry('800x600+0+0')
 
 def inicio():
-    inicio = tk.Frame(master = vista, bg = '#9dc09d')
-    datos = tk.Label(text = F"carnet: {carnet}     DPI:{Dpi} \n {nombre} {apelli}       {fecha} \n {username}        {correo}")
+    inicio = tk.Frame(master = vista)
+    inicio['bg'] = '#9dc09d'
+    datos = tk.Label(master = inicio, text = F"carnet: {carnet}     DPI:{Dpi} \n\n {nombre} {apelli}       {fecha} \n\nusuario: {username}        {correo}")
+    datos['bg'] = '#9dc09d'
     inicio.pack(pady = 10)
     datos.pack(padx = 10)
 
