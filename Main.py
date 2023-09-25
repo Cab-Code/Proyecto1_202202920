@@ -49,8 +49,6 @@ def acceso(data, dat1, dat2, dat3):
             
             usuario = elemento.split('-')
             usuarios.append(usuario)
-        print(usuarios, '\n')
-        print(usuarios[3][0])
     #busqueda de usuario y compara
     #comparacion de valores
     i = 0
