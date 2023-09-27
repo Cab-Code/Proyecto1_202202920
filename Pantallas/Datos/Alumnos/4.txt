@@ -1,0 +1,9 @@
+4,4,4,4,4,4,4,correo@gmail.com,4,4///
+
+
+
+
+terminales:67
+matematica:78
+Fisica:89
+programacion:100

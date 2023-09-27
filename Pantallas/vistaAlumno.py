@@ -2,14 +2,22 @@ import tkinter as tk
 import subprocess
 import sys
 argumentos = sys.argv
-print(len(argumentos))
-print(argumentos[len(argumentos) - 1])
 colorDos = '#9dc09d'
 colorUno = '#9dc09d'
 
-datos = ['202202920', 'Estuardo', 'Cabrera', '3050227170117', '12/04/2004', '56232849', 'EstCab', 'correo@gmail.com','contra', 'Bloqueado']
+datos = []
+cursos = []
+carnet = argumentos[len(argumentos) - 1]
+BaseDatos = F'Pantallas/Datos/Alumnos/{carnet}.txt'
 
-carnet = datos[0]
+
+with open(BaseDatos) as data:
+    DataRead = data.read()
+    alumno = DataRead.split('///\n')
+    print(alumno)
+    datos = alumno[0].split(',')
+    cursos = alumno[1].split('\n')
+
 nombre = datos[1]
 apelli = datos[2]
 Dpi = datos[3]
@@ -25,13 +33,41 @@ vista = tk.Tk()
 vista.title('Alumno')
 vista. geometry('800x600+0+0')
 
+def abrirCurso(curso):
+    enlace = F'Pantallas/Datos/Cursos/{curso}.txt'
+    print(enlace)
+
 def inicio():
-    inicio = tk.Frame(master = vista)
-    inicio['bg'] = '#9dc09d'
-    datos = tk.Label(master = inicio, text = F"carnet: {carnet}     DPI:{Dpi} \n\n {nombre} {apelli}       {fecha} \n\nusuario: {username}        {correo}")
+    inicioCtn = tk.Frame(master = vista)
+    inicioCtn['bg'] = '#9dc09d'
+    datos = tk.Label(master = inicioCtn, text = F"carnet: {carnet}     DPI:{Dpi} \n\n {nombre} {apelli}       {fecha} \n\nusuario: {username}        {correo}")
     datos['bg'] = '#9dc09d'
-    inicio.pack(pady = 10)
+    inicioCtn.pack(pady = 10)
     datos.pack(padx = 10)
 
+
+def vistaCursos ():
+    cursosCtn = tk.Frame(master = vista)
+    text = tk.Label(master = vista, text = 'Cursos Actuales')
+    text.pack(pady = 20)
+    cursosCtn.pack(pady = 20)
+    botones = []
+    parametrosBoton = []
+    for curso in cursos:
+        dataCurso = curso.split(':')
+        print(curso)
+        botonCurso = tk.Button(master = cursosCtn, text = dataCurso[0], command = lambda parametro = dataCurso[0]: abrirCurso(parametro))
+        botones.append(botonCurso)
+    i = 0
+    j = 0
+    for boton in botones:
+        print(boton)
+        boton.grid(column = i, row = j, padx = 30, pady = 20)
+        i+=1
+        if i >= 4:
+            j+=1
+            i = 0
+
 inicio()
+vistaCursos()
 vista.mainloop()

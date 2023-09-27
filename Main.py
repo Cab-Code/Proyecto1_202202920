@@ -10,9 +10,10 @@ prfClr = '#3f8880'
 admClr = '#9dc09d'
 extClr = '#a0fb0e'
 
+
+# Conteo para bloqueos de secion
+BloqueoA = 0
 #Inicio de ventana
-# 
- 
 iniSecion = tk.Tk()
 iniSecion.geometry('800x600+0+0')
 contenedor = tk.Frame(iniSecion,padx = 50, pady = 60, width = 600, height = 400)
@@ -41,15 +42,15 @@ def Inicio (iniSecion):
 
 def acceso(tipo, dat1, dat2, dat3):
     datosAlumno = []
+    
     if tipo == 'alumno':
-        BaseDatos = F'Datos/Alumnos/{dat1}.txt'
+        BaseDatos = F'Pantallas/Datos/Alumnos/{dat1}.txt'
         try:
             data = open(BaseDatos)
             alumno = data.read()
             alumno= alumno.split('///')
             datosAlumno = alumno[0].split(',')
-            print(alumno)
-            print(datosAlumno)
+            BloqueoA = int(datosAlumno[9])
 
             data.close()
         except:
@@ -59,9 +60,50 @@ def acceso(tipo, dat1, dat2, dat3):
         if datosAlumno[6] == dat2 and datosAlumno[8] == dat3:
             print('aceso concedido')
             subprocess.run(['python', 'Pantallas/vistaAlumno.py', datosAlumno[0]])
+        else:
+            alumnoNew = []
+            BloqueoA += 1
+            datosAlumno[9] = str(BloqueoA)
+            print(datosAlumno)
+            datosAlumno = ','.join(datosAlumno)
+            print(datosAlumno)
+            alumnoNew.append(datosAlumno)
+            alumnoNew.append('///\n')  
+            alumnoNew.append(alumno[1])
+            alumnoNewText = ''.join(alumnoNew)
+            print('----alumnoNewText----')
+            print(alumnoNewText)
+            try:
+                with open(BaseDatos, 'w') as data:
+                    data.write(alumnoNewText)
+            except:
+                print('Error')
+            print(BloqueoA)
+            if BloqueoA >= 3:
+                print('usuario Bloqueado')
+            subprocess.run(['python', 'Pantallas/error.py','Datos incorrectos', 'La contraseña o nombre de usuario no coinciden'])
+
         
     elif tipo == 'profesor':
-        print('profesor')
+        if tipo == 'alumno':
+            BaseDatos = F'Pantallas/Datos/Profesores/{dat1}.txt'
+        try:
+            data = open(BaseDatos)
+            prf = data.read()
+            prf= prf.split('///')
+            datosProfesor = prf[0].split(',')
+            print(prf)
+            print(datosProfesor)
+
+            data.close()
+        except:
+            print('Sin datos')
+            subprocess.run(['python', 'Pantallas/error.py', '404', f'usuario {dat1} no registrado'])
+        
+        if datosProfesor[6] == dat2 and datosProfesor[8] == dat3:
+            print('aceso concedido')
+            subprocess.run(['python', 'Pantallas/vistaAlumno.py', datosAlumno[0]])
+        
     elif tipo == 'admin':
         print('admin')
 
@@ -81,6 +123,7 @@ def getUserData (tipo, paramUno, paramDos, paramTres):
         password = paramTres.get()
         print(Dpi, userName, password)
         print('Profesor')
+        acceso(tipo, Dpi, userName, password)
     elif tipo == 'Admin':
         print('Administrador')
 
