@@ -8,7 +8,7 @@ errores = argumentos[2]
 
 
 error = tk.Tk()
-error.geometry('300x100')
+error.geometry('500x100')
 error.title(codigo)
 
 errorText = tk.Label(master = error, text = errores)

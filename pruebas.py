@@ -1,5 +1,7 @@
-import subprocess
+import crypt
 
-info = ['202202920', 'EstuardoCabrera', 'contraseña', 'ECB']
+texto = 'Hola Esto es un texto'
 
-subprocess.run(["python", 'pantallas/vistaAlumno.py'])
+encriptado = crypt(texto, 'SystemaD_ENCR1PT4C10N')
+
+print(encriptado)

@@ -1,8 +1,4 @@
-4,4,4,4,4,4,4,correo@gmail.com,4,4///
-
-
-
-
+4,4,4,4,4,4,4,correo@gmail.com,4,0///
 terminales:67
 matematica:78
 Fisica:89
