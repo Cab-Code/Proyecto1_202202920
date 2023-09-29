@@ -42,7 +42,7 @@ interCt.pack()
 
 def cerrarSecion():
     vista.destroy()
-    subprocess.run(['python', '..Proyecto\Main.py'])
+    subprocess.run(['python', '..\Proyecto/Main.py'])
     
 
 def masCursos():
