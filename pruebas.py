@@ -1,7 +1,8 @@
-import crypt
+import bcrypt
 
-texto = 'Hola Esto es un texto'
-
-encriptado = crypt(texto, 'SystemaD_ENCR1PT4C10N')
+texto = input('-:        ')
+pwd = texto.encode('utf-8')
+salt = b'$2b$12$ASCDyiUrL20F696Dwg8Iw.'
+encriptado = bcrypt.hashpw(pwd, salt)
 
 print(encriptado)

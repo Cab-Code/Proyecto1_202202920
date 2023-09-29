@@ -1,7 +1,11 @@
 import tkinter as tk
-from tkinter import ttk 
+import tkinter.font as tkFont
 import subprocess
+import bcrypt
 
+
+
+salt = b'$2b$12$ASCDyiUrL20F696Dwg8Iw.'
 
 #Paleta de Colores
 BGclr = '#fef6cd'
@@ -15,12 +19,14 @@ extClr = '#a0fb0e'
 BloqueoA = 0
 #Inicio de ventana
 iniSecion = tk.Tk()
-iniSecion.geometry('800x600+0+0')
-contenedor = tk.Frame(iniSecion,padx = 50, pady = 60, width = 600, height = 400)
-instruccion = tk.Label(master = contenedor, text = 'Iniciar secion como...')
-btnAlumno = tk.Button(master = contenedor, text = 'Alumno', width = 100, relief = 'flat', bg = almClr, command = lambda:SecionAlumno(contenedor, btnAdmin, btnAlumno, btnProfesor, instruccion))
-btnProfesor= tk.Button(master = contenedor, text = 'Profesor', width = 100, relief = 'flat', bg = prfClr,  command = lambda:SecionProfesor(contenedor, btnAdmin, btnAlumno, btnProfesor, instruccion))
-btnAdmin = tk.Button(master = contenedor, text = 'Administrador', width = 100, relief = 'flat', bg = admClr, command = lambda:SecionAdmin(contenedor, btnAdmin, btnAlumno, btnProfesor, instruccion))
+tituloFont = tkFont.Font(family = "Lucida Grande", size = 20)
+textoFont = tkFont.Font(family = "Lucida Grande", size = 12)
+iniSecion.geometry('900x650+0+0')
+contenedor = tk.Frame(iniSecion,padx = 50, pady = 40, width = 600, height = 400)
+instruccion = tk.Label(master = contenedor, text = 'Iniciar secion como...', font = tituloFont)
+btnAlumno = tk.Button(master = contenedor, text = 'Alumno', width = 100, relief = 'flat', bg = almClr, command = lambda:SecionAlumno(contenedor, btnAdmin, btnAlumno, btnProfesor, instruccion), font = textoFont)
+btnProfesor= tk.Button(master = contenedor, text = 'Profesor', width = 100, relief = 'flat', bg = prfClr,  command = lambda:SecionProfesor(contenedor, btnAdmin, btnAlumno, btnProfesor, instruccion), font = textoFont)
+btnAdmin = tk.Button(master = contenedor, text = 'Administrador', width = 100, relief = 'flat', bg = admClr, command = lambda:SecionAdmin(contenedor, btnAdmin, btnAlumno, btnProfesor, instruccion), font = textoFont)
 
 def Inicio (iniSecion):
     
@@ -45,31 +51,31 @@ def acceso(tipo, dat1, dat2, dat3):
     
     if tipo == 'alumno':
         BaseDatos = F'Pantallas/Datos/Alumnos/{dat1}.txt'
+        print(BaseDatos)
         try:
             data = open(BaseDatos)
             alumno = data.read()
             alumno= alumno.split('///\n')
             datosAlumno = alumno[0].split(',')
             BloqueoA = int(datosAlumno[9])
-
+            carnet = datosAlumno[0]
             data.close()
         except:
-            print('Sin datos')
             subprocess.run(['python', 'Pantallas/error.py', '404', f'usuario {dat1} no registrado'])
-        
-        if datosAlumno[6] == dat2 and datosAlumno[8] == dat3:
+
+        contraseña = datosAlumno[8]
+        contraseña = bytes(contraseña, 'utf-8')
+        contraseñaGet = bytes(dat3,'utf-8')
+
+            
+        if datosAlumno[6] == dat2 and bcrypt.checkpw(contraseñaGet,contraseña):
             if BloqueoA >= 3:
                 subprocess.run(['python', 'Pantallas/error.py','X', 'Usuario Bloqueado " Pongase en contacto con el administrador"'])
                 return
-            print('aceso concedido')
-            subprocess.run(['python', 'Pantallas/vistaAlumno.py', datosAlumno[0]])
-        else:
+            BloqueoA = 0
             alumnoNew = []
-            BloqueoA += 1
             datosAlumno[9] = str(BloqueoA)
-            print(datosAlumno)
             datosAlumno = ','.join(datosAlumno)
-            print(datosAlumno)
             alumnoNew.append(datosAlumno)
             alumnoNew.append('///\n')  
             alumnoNew.append(alumno[1])
@@ -78,7 +84,24 @@ def acceso(tipo, dat1, dat2, dat3):
                 with open(BaseDatos, 'w') as data:
                     data.write(alumnoNewText)
             except:
-                print('Error')
+                subprocess.run(['python', 'Pantallas/error.py','System Error', 'Ha ocorrido un error'])
+            #iniSecion.destroy()
+            subprocess.run(['python', 'Pantallas/vistaAlumno.py', carnet])
+
+        else:
+            alumnoNew = []
+            BloqueoA += 1
+            datosAlumno[9] = str(BloqueoA)
+            datosAlumno = ','.join(datosAlumno)
+            alumnoNew.append(datosAlumno)
+            alumnoNew.append('///\n')  
+            alumnoNew.append(alumno[1])
+            alumnoNewText = ''.join(alumnoNew)
+            try:
+                with open(BaseDatos, 'w') as data:
+                    data.write(alumnoNewText)
+            except:
+                subprocess.run(['python', 'Pantallas/error.py','System Error', 'Ha ocurrido un error'])
             if BloqueoA >= 3:
                 subprocess.run(['python', 'Pantallas/error.py','X', 'Usuario Bloqueado " Pongase en contacto con el administrador"'])
             subprocess.run(['python', 'Pantallas/error.py','Datos incorrectos', 'La contraseña o nombre de usuario no coinciden'])
@@ -92,15 +115,13 @@ def acceso(tipo, dat1, dat2, dat3):
             prf= prf.split('///')
             datosProfesor = prf[0].split(',')
             BloqueoP = datosProfesor[5]
-            print(prf)
-            print(datosProfesor)
-
             data.close()
         except:
             subprocess.run(['python', 'Pantallas/error.py', '404', f'usuario {dat1} no registrado'])
-        
-        if datosProfesor[3] == dat2 and datosProfesor[4] == dat3:
-            print('aceso concedido')
+        contraseña = datosProfesor[8]
+        contraseña = bytes(contraseña, 'utf-8')
+        contraseñaGet = bytes(dat3,'utf-8')
+        if datosProfesor[3] == dat2 and bcrypt.checkpw(contraseñaGet,contraseña):
             subprocess.run(['python', 'Pantallas/vistaProfesor.py', datosProfesor[0]])
         else:
             prfNew = []
@@ -127,8 +148,15 @@ def acceso(tipo, dat1, dat2, dat3):
         with open('Pantallas/Datos/Admin.txt') as data:
             lectura = data.read()
             admin = lectura.split(',')
+            contraseña = admin[1]
+            contraseña = bytes(contraseña, 'utf-8')
+            contraseñaGet = bytes(dat3,'utf-8')
             print(admin)
-            if dat1 == admin[0] and dat2 == admin[1]:
+            print('-----------------------')
+            print(contraseñaGet)
+            print(contraseña)
+
+            if dat1 == admin[0] and  bcrypt.checkpw(contraseñaGet,contraseña):
                 print('acceso Administrador concedido')
             else:
                 subprocess.run(['python', 'Pantallas/error.py','Datos incorrectos', 'La contraseña o nombre de usuario no coinciden'])
@@ -182,14 +210,14 @@ def SecionAlumno (contenedor, admin, alumno, profesor, instruc):
 
     
 
-    LabelA = tk.Label(master = contenedor, text = 'Carnet', bg = almClr)
-    getCarnet = tk.Entry(master = contenedor, width = 100, bg = BGclr, relief = 'flat')
+    LabelA = tk.Label(master = contenedor, text = 'Carnet', bg = almClr, font = textoFont)
+    getCarnet = tk.Entry(master = contenedor, width = 100, bg = BGclr, relief = 'flat', font = textoFont)
 
-    LabelB = tk.Label(master = contenedor, text = 'Nombre de Usuario', bg ='#20c67c')
-    getUserName = tk.Entry(master = contenedor, width = 100, bg = BGclr, relief = 'flat')
+    LabelB = tk.Label(master = contenedor, text = 'Nombre de Usuario', bg ='#20c67c', font = textoFont)
+    getUserName = tk.Entry(master = contenedor, width = 100, bg = BGclr, relief = 'flat', font = textoFont)
 
-    LabelC = tk.Label(master = contenedor, text = 'Contraseña', bg = almClr,)
-    getPassword = tk.Entry(master = contenedor, width = 100, bg = BGclr, relief = 'flat')
+    LabelC = tk.Label(master = contenedor, text = 'Contraseña', bg = almClr, font = textoFont)
+    getPassword = tk.Entry(master = contenedor, width = 100, bg = BGclr, relief = 'flat', font = textoFont)
     getPassword['show'] = '*'
 
     LabelA.pack(pady = 5)
@@ -201,12 +229,12 @@ def SecionAlumno (contenedor, admin, alumno, profesor, instruc):
 
     botones = tk.Frame(contenedor ,padx = 50, pady = 20, bg = almClr)
     botones.pack()
-    ingreso = tk.Button(master = botones, text = 'Ingresar', bg = extClr, relief = 'flat', command = lambda: getUserData('alumno',getCarnet, getUserName, getPassword))
-    ingreso.grid(column = 0, row = 0, padx = 40)
-    registro = tk.Button(master = botones, text = 'Nuevo Usuario', bg = extClr, relief = 'flat')
-    registro.grid(column = 2, row = 0, padx = 40)
-    regresar = tk.Button(master = botones, text = 'regresar', bg = extClr, relief = 'flat', command = lambda: restaurar([LabelA, LabelB, LabelC, getCarnet, getPassword, getUserName, botones, ingreso, registro, regresar]))
-    regresar.grid(column = 4, row = 0, padx = 40)
+    ingreso = tk.Button(master = botones, text = 'Ingresar', bg = extClr, relief = 'flat', command = lambda: getUserData('alumno',getCarnet, getUserName, getPassword), font = textoFont)
+    ingreso.grid(column = 0, row = 0, padx = 20)
+    registro = tk.Button(master = botones, text = 'Nuevo Usuario', bg = extClr, relief = 'flat', font = textoFont)
+    registro.grid(column = 2, row = 0, padx = 20)
+    regresar = tk.Button(master = botones, text = 'regresar', bg = extClr, relief = 'flat', command = lambda: restaurar([LabelA, LabelB, LabelC, getCarnet, getPassword, getUserName, botones, ingreso, registro, regresar]), font = textoFont)
+    regresar.grid(column = 4, row = 0, padx = 20)
 
 def SecionProfesor (contenedor, admin, alumno, profesor, instruc):
        
@@ -217,14 +245,14 @@ def SecionProfesor (contenedor, admin, alumno, profesor, instruc):
 
     
 
-    LabelA = tk.Label(master = contenedor, text = 'DPI', bg = prfClr)
-    getDPI = tk.Entry(master = contenedor, width = 100, bg = BGclr, relief = 'flat')
+    LabelA = tk.Label(master = contenedor, text = 'DPI', bg = prfClr, font = textoFont)
+    getDPI = tk.Entry(master = contenedor, width = 100, bg = BGclr, relief = 'flat', font = textoFont)
 
-    LabelB = tk.Label(master = contenedor, text = 'Nombre de Usuario', bg = prfClr)
-    getUserName = tk.Entry(master = contenedor, width = 100, bg = BGclr, relief = 'flat')
+    LabelB = tk.Label(master = contenedor, text = 'Nombre de Usuario', bg = prfClr, font = textoFont)
+    getUserName = tk.Entry(master = contenedor, width = 100, bg = BGclr, relief = 'flat', font = textoFont)
 
-    LabelC = tk.Label(master = contenedor, text = 'Contraseña', bg = prfClr,)
-    getPassword = tk.Entry(master = contenedor, width = 100, bg = BGclr, relief = 'flat')
+    LabelC = tk.Label(master = contenedor, text = 'Contraseña', bg = prfClr, font = textoFont)
+    getPassword = tk.Entry(master = contenedor, width = 100, bg = BGclr, relief = 'flat', font = textoFont)
     getPassword['show'] = '*'
 
     LabelA.pack(pady = 5)
@@ -236,9 +264,9 @@ def SecionProfesor (contenedor, admin, alumno, profesor, instruc):
 
     botones = tk.Frame(contenedor ,padx = 50, pady = 20, bg = prfClr)
     botones.pack()
-    ingreso = tk.Button(master = botones, text = 'Ingresar', bg = extClr, relief = 'flat', command = lambda: getUserData('profesor',getDPI, getUserName, getPassword))
+    ingreso = tk.Button(master = botones, text = 'Ingresar', bg = extClr, font = textoFont, relief = 'flat', command = lambda: getUserData('profesor',getDPI, getUserName, getPassword))
     ingreso.grid(column = 0, row = 0, padx = 40)
-    regresar = tk.Button(master = botones, text = 'regresar', bg = extClr, relief = 'flat', command = lambda: restaurar([LabelA, LabelB, LabelC, getDPI, getPassword, getUserName, botones, ingreso, regresar]))
+    regresar = tk.Button(master = botones, text = 'regresar', bg = extClr, font = textoFont, relief = 'flat', command = lambda: restaurar([LabelA, LabelB, LabelC, getDPI, getPassword, getUserName, botones, ingreso, regresar]))
     regresar.grid(column = 4, row = 0, padx = 40)
 
 def SecionAdmin (contenedor, admin, alumno, profesor, instruc):
@@ -249,11 +277,11 @@ def SecionAdmin (contenedor, admin, alumno, profesor, instruc):
     instruc['bg'] = admClr
 
     
-    LabelB = tk.Label(master = contenedor, text = 'Nombre de Usuario', bg = admClr)
-    getUserName = tk.Entry(master = contenedor, width = 100, bg = BGclr, relief = 'flat')
+    LabelB = tk.Label(master = contenedor, text = 'Nombre de Usuario', bg = admClr, font = textoFont)
+    getUserName = tk.Entry(master = contenedor, width = 100, bg = BGclr, relief = 'flat', font = textoFont)
 
-    LabelC = tk.Label(master = contenedor, text = 'Contraseña', bg = admClr,)
-    getPassword = tk.Entry(master = contenedor, width = 100, bg = BGclr, relief = 'flat')
+    LabelC = tk.Label(master = contenedor, text = 'Contraseña', bg = admClr, font = textoFont)
+    getPassword = tk.Entry(master = contenedor, width = 100, bg = BGclr, relief = 'flat', font = textoFont)
     getPassword['show'] = '*'
 
     LabelB.pack(pady = 5)
@@ -263,9 +291,9 @@ def SecionAdmin (contenedor, admin, alumno, profesor, instruc):
 
     botones = tk.Frame(contenedor ,padx = 50, pady = 20, bg = admClr)
     botones.pack()
-    ingreso = tk.Button(master = botones, text = 'Ingresar', bg = extClr, relief = 'flat', command = lambda: getUserData('admin', getUserName, getPassword, getPassword))
+    ingreso = tk.Button(master = botones, text = 'Ingresar', bg = extClr, font = textoFont, relief = 'flat', command = lambda: getUserData('admin', getUserName, getPassword, getPassword))
     ingreso.grid(column = 0, row = 0, padx = 40)
-    regresar = tk.Button(master = botones, text = 'regresar', bg = extClr, relief = 'flat', command = lambda: restaurar([LabelB, LabelC, getPassword, getUserName, botones, ingreso, regresar]))
+    regresar = tk.Button(master = botones, text = 'regresar', bg = extClr, font = textoFont, relief = 'flat', command = lambda: restaurar([LabelB, LabelC, getPassword, getUserName, botones, ingreso, regresar]))
     regresar.grid(column = 4, row = 0, padx = 40)
 
 
