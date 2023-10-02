@@ -1,4 +1,4 @@
-202202920,Estuardo,Cabrera,3050227170117,12/04/2004,56232849,EstCb,correo@gmail.com,$2b$12$ASCDyiUrL20F696Dwg8Iw.QgO6jQIf.MUnzLsn.AONzeTmH3O6.8u,0///
+202202920,Estuardo,Cabrera,3050227170117,12/04/2004,34,EstCb,correo@gmail.com,$2b$12$ASCDyiUrL20F696Dwg8Iw.bobAzl390qj6MZg1BeK4Otf/o2NkZ1.,0///
 terminales:67
 matematica:78
 Fisica:89

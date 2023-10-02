@@ -58,7 +58,8 @@ def usuarioConfig():
     
 
 def abrirCurso(curso):
-    enlace = F'Pantallas/Datos/Cursos/{curso}.txt'
+    enlace = F'Pantallas/CursoVistaAlumno.py'
+    subprocess.run(['python', enlace,curso, carnet])
     print(enlace)
 
 def inicio():

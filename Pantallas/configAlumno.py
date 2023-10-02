@@ -4,6 +4,9 @@ import subprocess
 import sys
 import bcrypt
 
+salt = b'$2b$12$ASCDyiUrL20F696Dwg8Iw.'
+
+color = '#20c67a'
 
 print('nueva ventana')
 argumentosPrograma = sys.argv
@@ -21,7 +24,7 @@ with open(F'Pantallas/Datos/Alumnos/{carnet}.txt') as BaseDatos:
 
 vista = tk.Tk()
 vista.title('Configuracion De Usuario')
-vista.geometry('750x600+0+0')
+vista.geometry('750x620+0+0')
 print(alumnoData)
 carnet = alumnoData[0]
 nombre = alumnoData[1]
@@ -81,36 +84,75 @@ def validarCorreo(dat):
         subprocess.run(['python', 'Pantallas/error.py', 'Datos incorrectos', 'ingrese un correo electronico valido (ejemplo: userName@gmail.com)'])
 
 
-def validarContraseña():
-    print('hola')
+def validarContraseña(oldContraGet, newContra1, newContra2):
+    oldContraGet = bytes(oldContraGet, 'utf-8')
+    encodedContra = bytes(contra, 'utf-8')
+    validLen = len(newContra1)
+    validSimb = 0
+    validNum = 0
+    validMay = 0
+    validMin = 0
+
+    if bcrypt.checkpw(oldContraGet,encodedContra):
+        for char in newContra1:
+            char = ord(char)
+            if char >= 32 and char <= 47:
+                validSimb = 1
+            if char > 47 and char <= 57:
+                validNum = 1
+            if char >= 65 and char <= 90:
+                validMay = 1
+            if char >= 97 and char <= 122:
+                validMin = 1
+            print(char)
+        if validSimb == 1 and validNum == 1 and validMay == 1 and validMin == 1 and validLen > 8:
+            if newContra1 == newContra2:
+                newContra1 = bytes(newContra1, 'utf-8')
+                NewEncriptedContra = bcrypt.hashpw(newContra1, salt)
+                encriptedContra = str(NewEncriptedContra)
+                encriptedContra = encriptedContra[2:-1]
+                alumnoData[8] = encriptedContra
+                reescribirData()
+                print(newContra1)
+            else:
+                print('confirme su sontraseña correctamente')
+                subprocess.run(['python', 'Pantallas/error.py', 'Datos Incorrectos', 'Confirme su contraseña correctamente'])
+        else:
+            print('contraseña totalmente INVALIDA')
+            subprocess.run(['python', 'Pantallas/error.py', 'Datos Incorrectos', 'Su contraseña debe tener: Mayusculas, Minusculas\n Minimo un numero y un simbolo [  !, ", #, $, %, &, /,), (, *, +, -, ·	]'])
+
+    else: 
+        print('coloque su antigua contraseña correctamente')
+        subprocess.run(['python', 'Pantallas/error.py', 'Datos Incorrectos', 'Coloque su antigua contraseña'])
+
         
     reescribirData()
 
-mainCtn = tk.Frame(master = vista, background = 'red')
+mainCtn = tk.Frame(master = vista, borderwidth=1, relief="solid")
 mainCtn.pack()
 
-firstCtn = tk.Frame(master = mainCtn, background = 'blue')
-labelCarnet = tk.Label(master = firstCtn, text = carnet)
+firstCtn = tk.Frame(master = mainCtn, relief="solid")
+labelCarnet = tk.Label(master = firstCtn, text = F'Carnet: {carnet}')
 firstCtn.grid(row = 0, column = 0, pady = 10, padx = 20)
 labelCarnet.grid(row = 0, column = 0)
 
-secondCtn = tk.Frame(master = mainCtn, background = 'blue')
-labelName = tk.Label(master = secondCtn, text = nombre)
-labelApellido = tk.Label(master = secondCtn, text = apelli)
-labelFechaN = tk.Label(master = secondCtn, text = fechaN)
+secondCtn = tk.Frame(master = mainCtn,borderwidth=1, relief="solid")
+labelName = tk.Label(master = secondCtn, text =  F'Nombre: {nombre}')
+labelApellido = tk.Label(master = secondCtn, text =  F'Apellido: {apelli}')
+labelFechaN = tk.Label(master = secondCtn, text =  F'Fecha de nacimiento: {fechaN}')
 TelCotn = tk.Frame(master = secondCtn)
-LabelTel = tk.Label(master = TelCotn, text = tel, )
+LabelTel = tk.Label(master = TelCotn, text =  F'Tel: {tel}')
 entryTel = tk.Entry(master = TelCotn)
-BtnTel = tk.Button(master = TelCotn, text = 'actualizar telefono', command = lambda: cambioTel(entryTel.get()))
+BtnTel = tk.Button(master = TelCotn, text = 'actualizar telefono', command = lambda: cambioTel(entryTel.get()), bg = color, relief = 'flat')
 CorreoCotn = tk.Frame(master = secondCtn)
 LabelCorreo = tk.Label(master = CorreoCotn, text = correo)
 entryCorreo = tk.Entry(master = CorreoCotn)
-BtnCorreo = tk.Button(master = CorreoCotn, text = 'actualizar correo', command = lambda: validarCorreo(entryCorreo.get())) 
+BtnCorreo = tk.Button(master = CorreoCotn, text = 'actualizar correo', command = lambda: validarCorreo(entryCorreo.get()), bg = color, relief = 'flat') 
 
-secondCtn.grid(row = 2, column = 0,pady = 10, padx = 20)
-labelName.grid(row = 0, column = 0,pady = 15, padx = 20)
-labelApellido.grid(row = 0, column = 1,pady = 15, padx = 20)
-labelFechaN.grid(row = 1, column = 0,pady = 15, padx = 20)
+secondCtn.grid(row = 2, column = 0,pady = 8, padx = 20)
+labelName.grid(row = 0, column = 0,pady = 8, padx = 20)
+labelApellido.grid(row = 0, column = 1,pady = 8, padx = 20)
+labelFechaN.grid(row = 1, column = 0,pady = 8, padx = 20)
 TelCotn.grid(row = 1, column = 1,pady = 8, padx = 20)
 LabelTel.grid(row = 0, column = 0,pady = 8, padx = 20)
 entryTel.grid(row = 1, column = 0, pady = 8, padx = 20)
@@ -120,9 +162,9 @@ LabelCorreo.grid(row = 0, column = 0, pady = 8, padx = 20)
 entryCorreo.grid(row = 1, column = 0, pady = 8, padx = 20)
 BtnCorreo.grid(row = 1, column = 1, pady = 8, padx = 20)
 
-contraseñaCtn = tk.Frame(master = mainCtn, background = 'green')
-contraseñaCtn.grid(row = 3, column = 0)
-labelInstrucciones = tk.Label(master = contraseñaCtn, text = 'Cambiar Contraseña')
+contraseñaCtn = tk.Frame(master = mainCtn, borderwidth = 1, relief="solid", width = 100)
+contraseñaCtn.grid(row = 3, column = 0, pady = 10)
+labelInstrucciones = tk.Label(master = contraseñaCtn, text = 'Cambiar Contraseña', width = 100 )
 labelInstrucciones.pack()
 labelA = tk.Label(master = contraseñaCtn, text = 'Contraseña Actual')
 entryA = tk.Entry(master = contraseñaCtn)
@@ -133,7 +175,7 @@ entryB = tk.Entry(master = contraseñaCtn)
 labelC = tk.Label(master = contraseñaCtn, text = 'Confirmar Nueva contraseña')
 entryC = tk.Entry(master = contraseñaCtn)
 
-contraseñaBtn = tk.Button(master = contraseñaCtn, text = 'Actualizar')
+contraseñaBtn = tk.Button(master = contraseñaCtn, text = 'Actualizar', command = lambda: validarContraseña(entryA.get(),entryB.get(),entryC.get()), bg = color, relief = 'flat')
 
 labelA.pack(pady = 8, padx = 20)
 entryA.pack(pady = 8, padx = 20)

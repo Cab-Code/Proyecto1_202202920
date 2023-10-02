@@ -151,10 +151,6 @@ def acceso(tipo, dat1, dat2, dat3):
             contraseña = admin[1]
             contraseña = bytes(contraseña, 'utf-8')
             contraseñaGet = bytes(dat3,'utf-8')
-            print(admin)
-            print('-----------------------')
-            print(contraseñaGet)
-            print(contraseña)
 
             if dat1 == admin[0] and  bcrypt.checkpw(contraseñaGet,contraseña):
                 print('acceso Administrador concedido')
