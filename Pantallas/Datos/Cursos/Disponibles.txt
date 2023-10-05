@@ -1,0 +1,7 @@
+NombreCurso,DPIprofesor,NombreProfesor
+NombreCurso,DPIprofesor,NombreProfesor
+matematica,DPIprofesor,NombreProfesor
+Fisica,DPIprofesor,NombreProfesor
+NombreCurso,DPIprofesor,NombreProfesor
+NombreCurso,DPIprofesor,NombreProfesor
+NombreCurso,DPIprofesor,NombreProfesor

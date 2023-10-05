@@ -49,7 +49,7 @@ def masCursos():
     if len(cursos) < 12:
         print('Tienes menos de 12 cursos')
         print(len(cursos))
-        subprocess.run(['python','Pantallas/CursosDisponibles.py'])
+        subprocess.run(['python','Pantallas/CursosDisponibles.py', carnet])
     else:
         subprocess.run(['python', 'Pantallas/error.py','Sobre Carga De Cursos', 'No puedes asignarte mas de 12 cursos por semestre'])
 
@@ -65,27 +65,26 @@ def abrirCurso(curso):
 def inicio():
     r0c0 = tk.Frame(master = interCt, cursor = 'hand2')
     r0c0['bg'] = colorUno
-    userConfigBtn = tk.Button(master = r0c0, text = F"carnet: {carnet} \n\nDPI: {Dpi}\n\n{nombre}  {apelli}\n\n Usuario: {username}", command = usuarioConfig, width = 100, pady = 30, font = textoFont, relief = 'flat')
-    userConfigBtn['bg'] = colorTres
+    userConfigBtn = tk.Button(master = r0c0, text = F"carnet: {carnet} \n\nDPI: {Dpi}\n\n{nombre}  {apelli}\n\n Usuario: {username}", command = usuarioConfig, width = 100, pady = 30, font = textoFont, borderwidth=1, relief="solid")
     r0c0.grid(row = 0, column = 0, sticky = 'W')
     userConfigBtn.pack()
 
 def vistaCursos ():
     
-    cursosCtn = tk.Frame(master = interCt, bg = colorDos)
-    botonesCtn = tk.Frame(master = cursosCtn, bg = colorUno, relief = 'ridge')
+    cursosCtn = tk.Frame(master = interCt)
+    botonesCtn = tk.Frame(master = cursosCtn)
     text = tk.Label(master = cursosCtn, text = 'Cursos Actuales', font = tituloFont)
     text.grid(column = 0, row = 0)
     botonesCtn.grid(column = 0, row = 1)
     cursosCtn.grid(pady = 20, row = 1, column = 0)
     extLabel = tk.Label(master = cursosCtn, text = " ")
     extLabel.grid(column = 1, row = 0, pady = 20)
-    masCursosBtn = tk.Button(master = cursosCtn, text = 'Mas Cursos...', command = masCursos, font = textoFont, relief = 'flat', cursor = 'hand2')
+    masCursosBtn = tk.Button(master = cursosCtn, text = 'Configurar Cursos', command = masCursos, font = textoFont, borderwidth=1, relief="solid", cursor = 'hand2')
     masCursosBtn.grid(column = 1, row = 1)
     botones = []
     for curso in cursos:
         dataCurso = curso.split(':')
-        botonCurso = tk.Button(master = botonesCtn, text = dataCurso[0], command = lambda parametro = dataCurso[0]: abrirCurso(parametro), relief = 'flat', pady = 20, bg = colorTres, width = 18, cursor = 'hand2')
+        botonCurso = tk.Button(master = botonesCtn, text = dataCurso[0], command = lambda parametro = dataCurso[0]: abrirCurso(parametro), borderwidth=1, relief="solid", pady = 20, width = 18, cursor = 'hand2')
         botones.append(botonCurso)
     i = 0
     j = 0
@@ -96,7 +95,7 @@ def vistaCursos ():
             j+=1
             i = 0
 
-    cerrarSecionBtn = tk.Button(master = cursosCtn, text = 'Cerrar Secion', command = cerrarSecion, font = textoFont, relief = 'flat', cursor = 'hand2')
+    cerrarSecionBtn = tk.Button(master = cursosCtn, text = 'Cerrar Secion', command = cerrarSecion, font = textoFont, borderwidth=1, relief="solid", cursor = 'hand2')
     cerrarSecionBtn.grid(row = 2, column = 1)
 
 
