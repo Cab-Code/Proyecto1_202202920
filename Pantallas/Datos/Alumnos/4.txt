@@ -1,4 +1,4 @@
-4,4,4,4,4,12345678,userNAme@gmail.com,correo@gmail.com,$2b$12$ASCDyiUrL20F696Dwg8Iw.FPaGo3Uba0m4uJmAXL2dL8UWsknve7e,3///
+4,4,4,4,4,12345678,4,correo@gmail.com,$2b$12$ASCDyiUrL20F696Dwg8Iw.FPaGo3Uba0m4uJmAXL2dL8UWsknve7e,0///
 terminales:67
 matematica:78
 Fisica:89

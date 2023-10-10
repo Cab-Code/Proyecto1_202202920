@@ -11,7 +11,7 @@ colorTres = '#20c67a'
 datos = []
 cursos = []
 carnet = argumentos[len(argumentos) - 1]
-print(carnet)
+
 BaseDatos = F'Pantallas/Datos/Alumnos/{carnet}.txt'
 
 
@@ -47,8 +47,6 @@ def cerrarSecion():
 
 def masCursos():
     if len(cursos) < 12:
-        print('Tienes menos de 12 cursos')
-        print(len(cursos))
         subprocess.run(['python','Pantallas/CursosDisponibles.py', carnet])
     else:
         subprocess.run(['python', 'Pantallas/error.py','Sobre Carga De Cursos', 'No puedes asignarte mas de 12 cursos por semestre'])
@@ -60,7 +58,6 @@ def usuarioConfig():
 def abrirCurso(curso):
     enlace = F'Pantallas/CursoVistaAlumno.py'
     subprocess.run(['python', enlace,curso, carnet])
-    print(enlace)
 
 def inicio():
     r0c0 = tk.Frame(master = interCt, cursor = 'hand2')
@@ -73,7 +70,7 @@ def vistaCursos ():
     
     cursosCtn = tk.Frame(master = interCt)
     botonesCtn = tk.Frame(master = cursosCtn)
-    text = tk.Label(master = cursosCtn, text = 'Cursos Actuales', font = tituloFont)
+    text = tk.Label(master = cursosCtn, text = 'Cursos Asignados', font = tituloFont)
     text.grid(column = 0, row = 0)
     botonesCtn.grid(column = 0, row = 1)
     cursosCtn.grid(pady = 20, row = 1, column = 0)
@@ -84,12 +81,12 @@ def vistaCursos ():
     botones = []
     for curso in cursos:
         dataCurso = curso.split(':')
-        botonCurso = tk.Button(master = botonesCtn, text = dataCurso[0], command = lambda parametro = dataCurso[0]: abrirCurso(parametro), borderwidth=1, relief="solid", pady = 20, width = 18, cursor = 'hand2')
+        botonCurso = tk.Button(master = botonesCtn, text = dataCurso[0], command = lambda parametro = dataCurso[0]: abrirCurso(parametro), borderwidth=1, relief="solid", pady = 20, width = 20, cursor = 'hand2')
         botones.append(botonCurso)
     i = 0
     j = 0
     for boton in botones:
-        boton.grid(column = i, row = j, padx = 30, pady = 20)
+        boton.grid(column = i, row = j, padx = 15, pady = 20)
         i+=1
         if i >= 4:
             j+=1

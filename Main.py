@@ -51,7 +51,6 @@ def acceso(tipo, dat1, dat2, dat3):
     
     if tipo == 'alumno':
         BaseDatos = F'Pantallas/Datos/Alumnos/{dat1}.txt'
-        print(BaseDatos)
         try:
             data = open(BaseDatos)
             alumno = data.read()
@@ -163,8 +162,6 @@ def getUserData (tipo, paramUno, paramDos, paramTres):
         carnet = paramUno.get()
         userName = paramDos.get()
         password = paramTres.get()
-        print(carnet, userName, password)
-
         acceso(tipo, carnet, userName, password)
 
     elif tipo == 'profesor':
@@ -195,7 +192,8 @@ def restaurar(widgets):
     btnProfesor.pack(pady = 10)
     btnAlumno.pack(pady = 10)
 
-
+def asignarAlumno():
+    subprocess.run(['python', 'Pantallas/AsignarAlumno.py'])
 
 def SecionAlumno (contenedor, admin, alumno, profesor, instruc):
        
@@ -227,7 +225,7 @@ def SecionAlumno (contenedor, admin, alumno, profesor, instruc):
     botones.pack()
     ingreso = tk.Button(master = botones, text = 'Ingresar', bg = extClr, relief = 'flat', command = lambda: getUserData('alumno',getCarnet, getUserName, getPassword), font = textoFont)
     ingreso.grid(column = 0, row = 0, padx = 20)
-    registro = tk.Button(master = botones, text = 'Nuevo Usuario', bg = extClr, relief = 'flat', font = textoFont)
+    registro = tk.Button(master = botones, text = 'Nuevo Usuario', bg = extClr, relief = 'flat', font = textoFont, command = asignarAlumno)
     registro.grid(column = 2, row = 0, padx = 20)
     regresar = tk.Button(master = botones, text = 'regresar', bg = extClr, relief = 'flat', command = lambda: restaurar([LabelA, LabelB, LabelC, getCarnet, getPassword, getUserName, botones, ingreso, registro, regresar]), font = textoFont)
     regresar.grid(column = 4, row = 0, padx = 20)

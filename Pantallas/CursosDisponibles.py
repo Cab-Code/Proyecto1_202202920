@@ -1,11 +1,30 @@
 import tkinter as tk
 import tkinter.font as tkFont
 import sys
+import subprocess
 
 carnet = sys.argv[1]
 vista = tk.Tk()
 vista.title('Cursos Disponibles')
 vista.geometry('800x600+0+0')
+
+frame = tk.Frame(vista)
+frame.pack(fill='both', expand=True)
+canvas = tk.Canvas(frame)
+canvas.pack(side='left', fill='both', expand=True)
+scrollbar = tk.Scrollbar(frame, orient='vertical', command=canvas.yview)
+scrollbar.pack(side='right', fill='y')
+canvas.configure(yscrollcommand=scrollbar.set)
+def on_canvas_configure(event):
+    canvas.configure(scrollregion=canvas.bbox("all"))
+
+canvas.bind("<Configure>", on_canvas_configure)
+
+def on_canvas_scroll(event):
+    canvas.yview_scroll(-1 * (event.delta // 120), "units")
+
+canvas.bind("<MouseWheel>", on_canvas_scroll)
+
 
 tituloFont = tkFont.Font(family = "Lucida Grande", size = 20)
 textoFont = tkFont.Font(family = "Lucida Grande", size = 12)
@@ -16,8 +35,11 @@ cursos = []
 MainCtn = tk.Frame(master = vista, padx = 10)
 MainCtn.pack()
 ib = 0
-
+botonesAsig = []
+botonesDesa = []
+alumnoDatos = []
 alumnoCursos = []
+
 
 with open('Pantallas/Datos/Cursos/Disponibles.txt') as BaseDatos:
     lectura = BaseDatos.read()
@@ -26,32 +48,64 @@ with open('Pantallas/Datos/Cursos/Disponibles.txt') as BaseDatos:
 with open(F'Pantallas/Datos/Alumnos/{carnet}.txt') as AlumnoBaseDatos:
     lectura = AlumnoBaseDatos.read()
     alumnoData = lectura.split('///\n')
+    alumnoDatos = alumnoData[0]
     alumnoCursos = alumnoData[1]
     alumnoCursos = alumnoCursos.split('\n')
+
+def rescribir():
+    NewData = []
+    NalumnoCursos = '\n'.join(alumnoCursos)
+    NewData.append(alumnoDatos)
+    NewData.append('///\n')
+    NewData.append(NalumnoCursos)
+    NewData = ''.join(NewData)
+    print(NewData)
+    with open(F'Pantallas/Datos/Alumnos/{carnet}.txt','w') as AlumnoBaseDatos:
+        AlumnoBaseDatos.write(NewData)
+
+
+def asignar(i):
+    if len(alumnoCursos) < 12:
+        alumnoCursos.append(F'{cursos[i]}:0')
+        botonesAsig[i]['state'] = tk.DISABLED
+        print(alumnoCursos)
+        rescribir()
+    else:
+        subprocess.run(['python', 'Pantallas/error.py','Error de asignacion', 'El estudiante no se puede asignar mas de 12 cursos por semestre'])
+
+def desasignar(name):
+    i = 0
+    for curso in alumnoCursos:
+        if curso == name:
+            return
+        i+=1
+    del alumnoCursos[i]
+    print(alumnoCursos)
+
 
 for curso in cursosData:
     if curso != '':
         curso = curso.split(',')
+        cursos.append(curso[0])
         Contenedor = tk.Frame(master = MainCtn, pady = 10, relief = 'solid', borderwidth = 1, padx = 5)
         nCurso = tk.Label(master = Contenedor, text = curso[0], font = tituloFont,width = 20)
         nPrf = tk.Label(master = Contenedor, text = curso[2], font = textoFont)
-        asignar = tk.Button(master = Contenedor, text = 'asignar', state = tk.NORMAL)
-        desasignar = tk.Button(master = Contenedor, text = 'desasignar', state = tk.DISABLED)
+        asignarBtn = tk.Button(master = Contenedor, text = 'asignar', state = tk.NORMAL, command = lambda k = ib: asignar(k))
+        desasignarBtn = tk.Button(master = Contenedor, text = 'desasignar', state = tk.DISABLED, command = lambda k = curso[0]: desasignar(k))
+        botonesAsig.append(asignarBtn)
+        botonesDesa.append(desasignarBtn)
         for aCurso in  alumnoCursos:
             aCurso = aCurso.split(':')
-            print(curso[0])
             if curso[0] == aCurso[0]:
-                asignar['state'] = tk.DISABLED
-                desasignar['state'] = tk.NORMAL
-                print(aCurso[0])
+                asignarBtn['state'] = tk.DISABLED
+                desasignarBtn['state'] = tk.NORMAL
                 break
         Contenedor.grid(column = 0, row = ib, pady = 5)
         nCurso.grid(column = 0, row = 0)
         nPrf.grid(column = 0, row = 1)
-        asignar.grid(column = 1, row = 1)
-        desasignar.grid(column = 2, row = 1)
+        asignarBtn.grid(column = 1, row = 1)
+        desasignarBtn.grid(column = 2, row = 1)
         ib = ib + 1
-
-
+canvas.create_window((0, 0), window=MainCtn, anchor='nw')
 
 vista.mainloop()
