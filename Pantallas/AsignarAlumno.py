@@ -5,13 +5,14 @@ import subprocess
 
 
 vista = tk.Tk()
-vista.geometry('600x600+0+0')
+vista.geometry('600x625+0+0')
 vista.title('Asignar Alumno')
 
 tituloFont = tkFont.Font(family = "Lucida Grande", size = 20)
 textoFont = tkFont.Font(family = "Lucida Grande", size = 12)
 
 carnets = []
+NewAlumnoData = [100]
 NuevoCarnet = 0
 def generarCarnet():
     subprocess.run(['Pantallas/OrdenadorCarnets.exe'])
@@ -94,8 +95,54 @@ confirmar.pack()
 contraN2Entry = tk.Entry(crdCtn)
 contraN2Entry.pack()
 
+
+def validarContra():
+    contraA = contraN1Entry.get()
+    contraB = contraN2Entry.get()
+
+    vMay = False
+    vMin = False
+    vsimb = False
+
+    if len(contraA) >= 8:
+        for char in contraA:
+            char = ord(char)
+            if char >= 32 and char <= 47:
+                vSimb = 1
+            if char > 47 and char <= 57:
+                vNum = 1
+            if char >= 65 and char <= 90:
+                vMay = 1
+            if char >= 97 and char <= 122:
+                vMin = 1
+            print(char)
+        if vSimb == 1 and vNum == 1 and vMay == 1 and vMin == 1:
+            if contraA == contraB:
+                print('Contra Validaaaa')
+                print(NewAlumnoData)
+            else:
+                subprocess.run(['python', 'Pantallas/error.py', 'Datos Incorrectos', 'Confirme su contraseña'])
+
+    else:
+        subprocess.run(['python', 'Pantallas/error.py', 'Datos Incorrectos', 'Su contraseña debe tener: Mayusculas, Minusculas\n Minimo un numero y un simbolo [  !, ", #, $, %, &, /,), (, *, +, -, ·	]'])
+
+
 def validarCorreo():
-    print('correo')
+    correo = correoEntry.get()
+    valid = 0
+    v = 0
+    for letra in correo:
+        if letra == '@':
+            valid = 1
+        if letra == '.' and valid == 1:
+            v = 4
+               
+    if v == 4:
+        print('Correo valido') 
+        validarContra() 
+    else:   
+        subprocess.run(['python', 'Pantallas/error.py', 'Datos incorrectos', 'ingrese un correo electronico valido (ejemplo: userName@gmail.com)'])
+
 
 def validarTel():
     telString = telEntry.get()
@@ -111,7 +158,9 @@ def validarTel():
     else:
         subprocess.run(['python', 'Pantallas/error.py', 'Datos incorrectos', 'El numero de telefono debe tener 8 digitos'])
     if validTel:
-        print('TelCorrecto')
+        NewAlumnoData.append(telString)
+        validarCorreo()
+
 def validarFecha():
     fechaString = fnEnt.get()
     fechaLista = fechaString.split('/')
@@ -124,7 +173,7 @@ def validarFecha():
         if int(fechaLista[0]) >= 0 and int(fechaLista[0]) < 31:
             if int(fechaLista[1]) > 0 and int(fechaLista[1]) <= 12:
                 if int(fechaLista[2]) > 1920 and int(fechaLista[2]) < 2006:
-                    print(fechaString)
+                    NewAlumnoData.append(fechaString)
                     validarTel()
     else:
         subprocess.run(['python', 'Pantallas/error.py', 'Datos incorrectos', 'El formato de fecha es incorrecto (DD/MM/AAAA)'])
@@ -150,11 +199,23 @@ def validarDPI():
                 break
             print(alumnoData[3])
     if validDpi:
-        validarFecha()
+        nombre = nombreEnt.get()
+        apellido = apellidoEnt.get()
+
+        if nombre != '' and apellido != '':
+            NewAlumnoData.append(NuevoCarnet) 
+            NewAlumnoData.append(nombre)
+            NewAlumnoData.append(apellido)
+            NewAlumnoData.append(dpi)
+            validarFecha()
+        else:
+            subprocess.run(['python', 'Pantallas/error.py', 'Datos incorrectos', 'Igrese su nombre y apellidos'])
+
+        
 
 
-asignarBtn = tk.Button(vista, text = 'asignar', relief = 'flat', command = validarDPI)
-asignarBtn.pack()
+asignarBtn = tk.Button(vista, text = 'asignar', command = validarDPI, relief = 'solid', borderwidth = 1)
+asignarBtn.pack(pady = 30)
 
 
 
