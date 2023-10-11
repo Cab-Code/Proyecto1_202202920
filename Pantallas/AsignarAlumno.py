@@ -1,5 +1,6 @@
 import tkinter as tk
 import tkinter.font as tkFont
+import subprocess
 
 
 
@@ -10,19 +11,22 @@ vista.title('Asignar Alumno')
 tituloFont = tkFont.Font(family = "Lucida Grande", size = 20)
 textoFont = tkFont.Font(family = "Lucida Grande", size = 12)
 
+carnets = []
 NuevoCarnet = 0
+def generarCarnet():
+    subprocess.run(['Pantallas/OrdenadorCarnets.exe'])
+    with open('Pantallas/carnets.txt') as file:
+        leer = file.read()
+        carnets = leer.split('\n')
+        lastCarnet = carnets[-1]
+        print(lastCarnet)
+        NewCarnet = int(lastCarnet) + 1
+        return NewCarnet, carnets
 
-def CrearCarnet():
-    print('Carnet')
+NuevoCarnet, carnets = generarCarnet()
 
 def crearDocumento():
-    archivo = open('Pantallas/Datos/Alumnos/prueba.txt', 'w')
-    archivo.write('Hola Mundo')
-
-
-
-
-
+    open(F"Pantallas/Datos/Alumnos/{NuevoCarnet}.txt", 'w').close()
 
 
 mainCtn = tk.Frame(master = vista)
@@ -31,20 +35,24 @@ mainCtn.pack(padx = 5, pady = 20)
 titulo = tk.Label(mainCtn, text = 'Ingrese Sus Datos', font =  tituloFont)
 titulo.grid(row = 0, column = 0)
 
+carnetLbl = tk.Label(mainCtn, text = F'Carnet: {NuevoCarnet}', font =  textoFont)
+carnetLbl.grid(row = 1, column = 0, pady = 20)
+
+
 DpiLbl = tk.Label(mainCtn, text = 'DPI', font =  textoFont)
-DpiLbl.grid(row = 1, column = 0)
+DpiLbl.grid(row = 2, column = 0)
 DpiEnt = tk.Entry(mainCtn, font =  textoFont)
-DpiEnt.grid(row = 2, column = 0)
+DpiEnt.grid(row = 3, column = 0)
 
 nombreLbl = tk.Label(mainCtn, text = 'Nombres', font =  textoFont)
-nombreLbl.grid(row = 3, column = 0)
+nombreLbl.grid(row = 4, column = 0)
 nombreEnt = tk.Entry(mainCtn, font =  textoFont)
-nombreEnt.grid(row = 4, column = 0)
+nombreEnt.grid(row = 5, column = 0)
 
 apellidoLbl = tk.Label(mainCtn, text = 'Apellidos', font =  textoFont)
-apellidoLbl.grid(row = 5, column = 0)
+apellidoLbl.grid(row = 6, column = 0)
 apellidoEnt = tk.Entry(mainCtn, font =  textoFont)
-apellidoEnt.grid(row = 6, column = 0)
+apellidoEnt.grid(row = 7, column = 0)
 
 subCtn = tk.Frame(vista, padx = 5, pady = 5)
 subCtn.pack(pady = 20)
@@ -54,8 +62,8 @@ firstCtn.grid(row = 0, column = 0, padx = 20)
 
 fnLbl = tk.Label(firstCtn, text = 'Fecha de Nacimiento\n DD/MM/AAAA', pady = 5)
 fnLbl.grid(row = 0, column = 0)
-fnDiaEnt = tk.Entry(firstCtn)
-fnDiaEnt.grid(row = 1, column = 0, padx = 5)
+fnEnt = tk.Entry(firstCtn)
+fnEnt.grid(row = 1, column = 0, padx = 5)
 
 SecondCtn = tk.Frame(subCtn, padx = 5, pady = 5)
 SecondCtn.grid(row = 0, column = 1, padx = 20)
@@ -86,9 +94,68 @@ confirmar.pack()
 contraN2Entry = tk.Entry(crdCtn)
 contraN2Entry.pack()
 
-asignarBtn = tk.Button(vista, text = 'asignar')
+def validarCorreo():
+    print('correo')
+
+def validarTel():
+    telString = telEntry.get()
+    validTel = False
+    if len(telString) == 8:
+        print('correcto')
+        try:
+            aux = int(telString)
+            validTel = True
+        except:
+            subprocess.run(['python', 'Pantallas/error.py', 'Datos incorrectos', 'En el area Tel Ingrese solo datos numericos'])
+
+    else:
+        subprocess.run(['python', 'Pantallas/error.py', 'Datos incorrectos', 'El numero de telefono debe tener 8 digitos'])
+    if validTel:
+        print('TelCorrecto')
+def validarFecha():
+    fechaString = fnEnt.get()
+    fechaLista = fechaString.split('/')
+    if len(fechaLista) == 3:
+        for dato in fechaLista:
+            try:
+                aux = int(dato)
+            except:
+                subprocess.run(['python', 'Pantallas/error.py', 'Datos incorrectos', 'El formato de fecha es incorrecto (DD/MM/AAAA)'])
+        if int(fechaLista[0]) >= 0 and int(fechaLista[0]) < 31:
+            if int(fechaLista[1]) > 0 and int(fechaLista[1]) <= 12:
+                if int(fechaLista[2]) > 1920 and int(fechaLista[2]) < 2006:
+                    print(fechaString)
+                    validarTel()
+    else:
+        subprocess.run(['python', 'Pantallas/error.py', 'Datos incorrectos', 'El formato de fecha es incorrecto (DD/MM/AAAA)'])
+
+
+def validarDPI():
+    dpi = DpiEnt.get()
+    validDpi = True
+    try:
+        NumDpi = int(dpi)
+        if len(dpi) != 13:
+            subprocess.run(['python', 'Pantallas/error.py', 'Datos incorrectos', 'El DPI debe ser un dato numerico de 13 digitos'])
+    except:
+        subprocess.run(['python', 'Pantallas/error.py', 'Datos incorrectos', 'El DPI debe ser un dato numerico de 13 digitos'])
+    for carnet in carnets:
+        print(carnet)
+        with open(F'Pantallas/Datos/Alumnos/{carnet}.txt') as carnetData:
+            leer = carnetData.read()
+            alumnoData = leer.split(',')
+            if dpi == alumnoData[3]:
+                validarDPI = False
+                subprocess.run(['python', 'Pantallas/error.py', 'Datos incorrectos', 'Este DPI ya ha sido registrado (Usted podria estar cometiendo suplantacion de identidad)']) 
+                break
+            print(alumnoData[3])
+    if validDpi:
+        validarFecha()
+
+
+asignarBtn = tk.Button(vista, text = 'asignar', relief = 'flat', command = validarDPI)
 asignarBtn.pack()
 
-crearDocumento()
+
 
 vista.mainloop()

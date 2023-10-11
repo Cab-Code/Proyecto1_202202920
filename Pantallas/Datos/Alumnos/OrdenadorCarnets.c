@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-int carnets[10];
+int carnets[100];
 
 void crearLista(char carnetStr[], int i){
     int carnet = (int) strtol(carnetStr, NULL, 10);
@@ -39,24 +39,40 @@ void quickSort(int carnets[], int inicio, int fin){
 }
 
 void imprimir(int carnets[], int tam){
-
     for (int i = 0; i < tam; i++)
     {
         printf("%d\n", carnets[i]);
     }
+}
+
+void escribir(int carnets[], int tam){
+    FILE *archivo;
+    int i = 0;
+    archivo = fopen("carnets.txt", "w");
+    char carnet[100];
+    if (carnet != 0){
+        for(i = 1; i < tam; i++){
+            sprintf(carnet, "%d\n", carnets[i]);
+            fputs(carnet, archivo);
+    }
+    printf("----- %d ------", i);
+    sprintf(carnet, "%d", carnets[i]);
+    fputs(carnet, archivo);
+    }
     
+
+    fclose(archivo); 
 }
 
 int main () { 
 FILE *archivo;
 char caracter;
-char lectura[10];
-int tamano = 0;
+char lectura[100];
 int i = 0;
-archivo = fopen("carnetsprueba.txt", "r");
+archivo = fopen("carnets.txt", "r");
 if (archivo != NULL){
     while (feof(archivo) == 0){ 
-            fgets (lectura, 10, archivo); 
+            fgets (lectura, 100, archivo); 
             crearLista(lectura, i);
             i++;
         }
@@ -66,11 +82,10 @@ if (archivo != NULL){
     printf("El archivo no existe o no se tienen permisos de lectura. \n");
 }
 
-tamano = i;
-
-printf("Tamano: %d", tamano);
 
 quickSort(carnets, 0, i);
-printf(carnets);
 imprimir(carnets, i);
+escribir(carnets, i);
+
+return 0;
 }
