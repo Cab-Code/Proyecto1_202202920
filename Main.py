@@ -113,19 +113,19 @@ def acceso(tipo, dat1, dat2, dat3):
             prf = data.read()
             prf= prf.split('///')
             datosProfesor = prf[0].split(',')
-            BloqueoP = datosProfesor[5]
+            BloqueoP = datosProfesor[7]
             data.close()
         except:
             subprocess.run(['python', 'Pantallas/error.py', '404', f'usuario {dat1} no registrado'])
-        contraseña = datosProfesor[8]
+        contraseña = datosProfesor[6]
         contraseña = bytes(contraseña, 'utf-8')
         contraseñaGet = bytes(dat3,'utf-8')
-        if datosProfesor[3] == dat2 and bcrypt.checkpw(contraseñaGet,contraseña):
+        if datosProfesor[5] == dat2 and bcrypt.checkpw(contraseñaGet,contraseña):
             subprocess.run(['python', 'Pantallas/vistaProfesor.py', datosProfesor[0]])
         else:
             prfNew = []
             BloqueoP+= 1
-            datosProfesor[9] = str(BloqueoA)
+            datosProfesor[7] = str(BloqueoA)
             print(datosProfesor)
             datosProfesor = ','.join(datosProfesor)
             print(datosProfesor)
@@ -152,7 +152,7 @@ def acceso(tipo, dat1, dat2, dat3):
             contraseñaGet = bytes(dat3,'utf-8')
 
             if dat1 == admin[0] and  bcrypt.checkpw(contraseñaGet,contraseña):
-                print('acceso Administrador concedido')
+                subprocess.run(['python', 'Pantallas/vistaAdmin.py'])
             else:
                 subprocess.run(['python', 'Pantallas/error.py','Datos incorrectos', 'La contraseña o nombre de usuario no coinciden'])
                 
