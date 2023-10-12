@@ -1,8 +1,10 @@
 import tkinter as tk
 import tkinter.font as tkFont
 import subprocess
+import bcrypt
 
 
+salt = b'$2b$12$ASCDyiUrL20F696Dwg8Iw.'
 
 vista = tk.Tk()
 vista.geometry('600x625+0+0')
@@ -12,7 +14,7 @@ tituloFont = tkFont.Font(family = "Lucida Grande", size = 20)
 textoFont = tkFont.Font(family = "Lucida Grande", size = 12)
 
 carnets = []
-NewAlumnoData = [100]
+NewAlumnoData = ['', '', '', '', '', '', '', '', '', '0///']
 NuevoCarnet = 0
 def generarCarnet():
     subprocess.run(['Pantallas/OrdenadorCarnets.exe'])
@@ -25,7 +27,7 @@ def generarCarnet():
         return NewCarnet, carnets
 
 NuevoCarnet, carnets = generarCarnet()
-
+userName = ''
 def crearDocumento():
     open(F"Pantallas/Datos/Alumnos/{NuevoCarnet}.txt", 'w').close()
 
@@ -88,12 +90,25 @@ crdCtn.pack()
 
 crdLbl = tk.Label(crdCtn, text = 'Contraseña', pady = 5)
 crdLbl.pack()
-contraN1Entry = tk.Entry(crdCtn)
+contraN1Entry = tk.Entry(crdCtn, show = '*')
 contraN1Entry.pack()
 confirmar = tk.Label(crdCtn, text = 'Confirmar Contraseña', pady = 5)
 confirmar.pack()
-contraN2Entry = tk.Entry(crdCtn)
+contraN2Entry = tk.Entry(crdCtn, show = '*')
 contraN2Entry.pack()
+
+def escribir():
+    NewData = ','.join(NewAlumnoData)
+    open(F'Pantallas/Datos/Alumnos/{NuevoCarnet}.txt', 'w').close()
+
+    with open(F'Pantallas/Datos/Alumnos/{NuevoCarnet}.txt', 'w') as AlumnoFile:
+        AlumnoFile.write(NewData)
+    
+    with open('Pantallas/carnets.txt', 'a') as carnetsFile:
+        carnetsFile.write(F'\n{NuevoCarnet}')
+
+    subprocess.run(['python', 'Pantallas/error.py', 'Asignacion correcta', F'Sus Datos Son:\n carnet: {NuevoCarnet}      Usuario: {NewAlumnoData[6]}'])
+    vista.destroy()
 
 
 def validarContra():
@@ -119,7 +134,16 @@ def validarContra():
         if vSimb == 1 and vNum == 1 and vMay == 1 and vMin == 1:
             if contraA == contraB:
                 print('Contra Validaaaa')
-                print(NewAlumnoData)
+                newContra1 = bytes(contraA, 'utf-8')
+                NewEncriptedContra = bcrypt.hashpw(newContra1, salt)
+                encriptedContra = str(NewEncriptedContra)
+                encriptedContra = encriptedContra[2:-1]
+                print(encriptedContra)
+
+                NewAlumnoData[8] = encriptedContra
+                
+
+                escribir()
             else:
                 subprocess.run(['python', 'Pantallas/error.py', 'Datos Incorrectos', 'Confirme su contraseña'])
 
@@ -138,11 +162,37 @@ def validarCorreo():
             v = 4
                
     if v == 4:
-        print('Correo valido') 
+        print('Correo valido')
+        NewAlumnoData[7] = correo
         validarContra() 
     else:   
         subprocess.run(['python', 'Pantallas/error.py', 'Datos incorrectos', 'ingrese un correo electronico valido (ejemplo: userName@gmail.com)'])
 
+def crearUserName():
+    nombre = nombreEnt.get().split(' ')
+    nombreA = nombre[0]
+    apellido = apellidoEnt.get().split(' ')
+    apellidoA = apellido[0]
+
+    userName = F'{nombreA} {apellidoA}'
+    
+    with open('Pantallas/carnets.txt') as CarnetsDB:
+        leer = CarnetsDB.read()
+        carnetsComp = leer.split('\n')
+        for carnet in carnetsComp:
+            db = open(F'Pantallas/Datos/Alumnos/{carnet}.txt')
+            info = db.read()
+            carnetInfo = info.split(',')
+            if userName == carnetInfo[6]:
+                numeroEsp = 20239999 - NuevoCarnet
+                print(numeroEsp)
+                userName = F'{nombreA}_{apellidoA}_{str(numeroEsp)}'
+                print(userName)
+            db.close()
+    print(userName)
+    NewAlumnoData[6] = userName
+
+    validarCorreo()
 
 def validarTel():
     telString = telEntry.get()
@@ -158,8 +208,8 @@ def validarTel():
     else:
         subprocess.run(['python', 'Pantallas/error.py', 'Datos incorrectos', 'El numero de telefono debe tener 8 digitos'])
     if validTel:
-        NewAlumnoData.append(telString)
-        validarCorreo()
+        NewAlumnoData[5] = telString
+        crearUserName()
 
 def validarFecha():
     fechaString = fnEnt.get()
@@ -173,7 +223,7 @@ def validarFecha():
         if int(fechaLista[0]) >= 0 and int(fechaLista[0]) < 31:
             if int(fechaLista[1]) > 0 and int(fechaLista[1]) <= 12:
                 if int(fechaLista[2]) > 1920 and int(fechaLista[2]) < 2006:
-                    NewAlumnoData.append(fechaString)
+                    NewAlumnoData[4] = fechaString
                     validarTel()
     else:
         subprocess.run(['python', 'Pantallas/error.py', 'Datos incorrectos', 'El formato de fecha es incorrecto (DD/MM/AAAA)'])
@@ -194,7 +244,7 @@ def validarDPI():
             leer = carnetData.read()
             alumnoData = leer.split(',')
             if dpi == alumnoData[3]:
-                validarDPI = False
+                validDpi = False
                 subprocess.run(['python', 'Pantallas/error.py', 'Datos incorrectos', 'Este DPI ya ha sido registrado (Usted podria estar cometiendo suplantacion de identidad)']) 
                 break
             print(alumnoData[3])
@@ -203,10 +253,10 @@ def validarDPI():
         apellido = apellidoEnt.get()
 
         if nombre != '' and apellido != '':
-            NewAlumnoData.append(NuevoCarnet) 
-            NewAlumnoData.append(nombre)
-            NewAlumnoData.append(apellido)
-            NewAlumnoData.append(dpi)
+            NewAlumnoData[0] = str(NuevoCarnet) 
+            NewAlumnoData[1] = nombre
+            NewAlumnoData[2] = apellido
+            NewAlumnoData[3] = dpi
             validarFecha()
         else:
             subprocess.run(['python', 'Pantallas/error.py', 'Datos incorrectos', 'Igrese su nombre y apellidos'])
