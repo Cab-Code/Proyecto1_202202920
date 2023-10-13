@@ -47,8 +47,21 @@ cupoEntry.grid(column = 3, row = 1, padx = 10)
 
 
 
+def escribir():
+     with open('Pantallas/Datos/Cursos/Disponibles.txt', 'a') as DispFile:
+        NewData = ','.join(NewCurso)
+        DispFile.write(F'\n{NewData}')
+          
+
 def validarCupo():
-    print('Cupo')
+    cupo = cupoEntry.get()
+    print(cupo)
+    try:
+        aus = int(cupo)
+        NewCurso[3] = str(aus)
+        
+    except:
+            subprocess.run(['python', 'Pantallas/error.py', 'Datos incorrectos', 'El cupo del curso debe ser un numero entero'])
 
 
 def validarDpi():
@@ -56,10 +69,12 @@ def validarDpi():
     if len(dpi) == 13:
         try:
             aux = int(dpi)
-            NewCurso[1]  = dpi
-            NewCurso[2] = PrfEntry.get()
         except:
             subprocess.run(['python', 'Pantallas/error.py', 'Datos incorrectos', 'Ingrese un Dpi valido'])
+        with open('Pantallas/profesores') as filePrf:
+            NewCurso[1]  = dpi
+            NewCurso[2] = PrfEntry.get()
+            validarCupo()
              
 
 def validarNombre():
@@ -75,7 +90,7 @@ def validarNombre():
 
 
 
-crearBtn = tk.Button(mainCtn, text = 'Crear Curso')
+crearBtn = tk.Button(mainCtn, text = 'Crear Curso', command = validarNombre)
 crearBtn.pack(pady = 50)
 
 vista.mainloop()
