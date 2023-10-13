@@ -6,4 +6,4 @@ programacion:100
 terminales:67
 matematica:78
 Fisica:89
-programacion:100
+1234567890123456789012:100

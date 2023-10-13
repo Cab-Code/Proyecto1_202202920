@@ -1,7 +1,7 @@
-NombreCurso,DPIprofesor,NombreProfesor
-NombreCurso,DPIprofesor,NombreProfesor
-matematica,DPIprofesor,NombreProfesor
-Fisica,DPIprofesor,NombreProfesor
-NombreCurso,DPIprofesor,NombreProfesor
-NombreCurso,DPIprofesor,NombreProfesor
-NombreCurso,DPIprofesor,NombreProfesor
+NombreCurso,DPIprofesor,NombreProfesor,79
+NombreCurso,DPIprofesor,NombreProfesor,99
+matematica,DPIprofesor,NombreProfesor,100
+Fisica,DPIprofesor,NombreProfesor,100
+NombreCurso,DPIprofesor,NombreProfesor,100
+NombreCurso,DPIprofesor,NombreProfesor,0
+NombreCurso,DPIprofesor,NombreProfesor,100

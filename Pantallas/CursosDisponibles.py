@@ -62,6 +62,9 @@ def rescribir():
     print(NewData)
     with open(F'Pantallas/Datos/Alumnos/{carnet}.txt','w') as AlumnoBaseDatos:
         AlumnoBaseDatos.write(NewData)
+    with open(F'Pantallas/Datos/Cursos/Disponibles.txt','w') as DisponiblesDatos:
+        NewDataCurso = '\n'.join(cursosData)
+        DisponiblesDatos.write(NewDataCurso)
 
 
 def asignar(i):
@@ -69,6 +72,16 @@ def asignar(i):
         alumnoCursos.append(F'{cursos[i]}:0')
         botonesAsig[i]['state'] = tk.DISABLED
         print(alumnoCursos)
+        aux = cursosData[i].split(',')
+        aux[3] = int(aux[3]) - 1
+        aux[3] = str(aux[3])
+
+        print(cursosData[i])
+
+        cursosData[i] = ','.join(aux)
+
+        print(cursosData[i])
+
         rescribir()
     else:
         subprocess.run(['python', 'Pantallas/error.py','Error de asignacion', 'El estudiante no se puede asignar mas de 12 cursos por semestre'])
@@ -100,11 +113,15 @@ for curso in cursosData:
                 asignarBtn['state'] = tk.DISABLED
                 desasignarBtn['state'] = tk.NORMAL
                 break
+            if curso[3] == '0':
+                asignarBtn['state'] = tk.DISABLED
+                desasignarBtn['state'] = tk.DISABLED
+                break
         Contenedor.grid(column = 0, row = ib, pady = 5)
         nCurso.grid(column = 0, row = 0)
         nPrf.grid(column = 0, row = 1)
-        asignarBtn.grid(column = 1, row = 1)
-        desasignarBtn.grid(column = 2, row = 1)
+        asignarBtn.grid(column = 1, row = 1, padx = 5)
+        desasignarBtn.grid(column = 2, row = 1, padx = 5)
         ib = ib + 1
 canvas.create_window((0, 0), window=MainCtn, anchor='nw')
 
