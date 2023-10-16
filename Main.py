@@ -107,9 +107,9 @@ def acceso(tipo, dat1, dat2, dat3):
 
         
     elif tipo == 'profesor':
-        BaseDatos = F'Pantallas/Datos/Profesores/{dat1}.txt'
+        BaseDatosPr = F'Pantallas/Datos/Profesores/{dat1}.txt'
         try:
-            data = open(BaseDatos)
+            data = open(BaseDatosPr)
             prf = data.read()
             prf= prf.split('///')
             datosProfesor = prf[0].split(',')

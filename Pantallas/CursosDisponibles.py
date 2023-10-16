@@ -65,6 +65,8 @@ def rescribir():
     with open(F'Pantallas/Datos/Cursos/Disponibles.txt','w') as DisponiblesDatos:
         NewDataCurso = '\n'.join(cursosData)
         DisponiblesDatos.write(NewDataCurso)
+    subprocess.run(['python', 'Pantallas/error.py','Asignacion existosa', 'Asignacion Existosa. Reinicia tu perfil para ver los cambios'])
+    
 
 
 def asignar(i):
@@ -83,6 +85,7 @@ def asignar(i):
         print(cursosData[i])
 
         rescribir()
+        
     else:
         subprocess.run(['python', 'Pantallas/error.py','Error de asignacion', 'El estudiante no se puede asignar mas de 12 cursos por semestre'])
 
@@ -93,6 +96,13 @@ def desasignar(name):
             return
         i+=1
     del alumnoCursos[i]
+    aux = cursosData[i].split(',')
+    aux[3] = int(aux[3]) + 1
+    aux[3] = str(aux[3])
+
+    print(cursosData[i])
+
+    cursosData[i] = ','.join(aux)
     print(alumnoCursos)
 
 

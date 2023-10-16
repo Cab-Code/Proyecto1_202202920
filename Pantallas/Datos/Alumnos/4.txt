@@ -7,3 +7,4 @@ terminales:67
 matematica:78
 Fisica:89
 1234567890123456789012:100
+Sistemas de Control:0

@@ -48,10 +48,17 @@ cupoEntry.grid(column = 3, row = 1, padx = 10)
 
 
 def escribir():
-     with open('Pantallas/Datos/Cursos/Disponibles.txt', 'a') as DispFile:
+    with open('Pantallas/Datos/Cursos/Disponibles.txt', 'a') as DispFile:
         NewData = ','.join(NewCurso)
+        print(NewData)
         DispFile.write(F'\n{NewData}')
-          
+    with open(F'Pantallas/Datos/Profesores/{NewCurso[1]}.txt', 'a') as PrfFile:
+        PrfFile.write(F'\n{NewCurso[0]}')    
+    open(F'Pantallas/Datos/Cursos/{NewCurso[0]}.txt', 'w').close()
+
+    with open(F'Pantallas/Datos/Cursos/{NewCurso[0]}.txt', 'w') as FileNewCurso:
+         DispFile.write(F'titulo///\nEsta es la descripcion del curso///\n{NewCurso[1]}///\nimg0///')
+    
 
 def validarCupo():
     cupo = cupoEntry.get()
@@ -59,22 +66,39 @@ def validarCupo():
     try:
         aus = int(cupo)
         NewCurso[3] = str(aus)
+        escribir()
         
     except:
             subprocess.run(['python', 'Pantallas/error.py', 'Datos incorrectos', 'El cupo del curso debe ser un numero entero'])
 
 
 def validarDpi():
+    validDPI = False
     dpi = DpiEntry.get()
     if len(dpi) == 13:
         try:
             aux = int(dpi)
         except:
-            subprocess.run(['python', 'Pantallas/error.py', 'Datos incorrectos', 'Ingrese un Dpi valido'])
-        with open('Pantallas/profesores') as filePrf:
-            NewCurso[1]  = dpi
-            NewCurso[2] = PrfEntry.get()
-            validarCupo()
+            subprocess.run(['python', 'Pantallas/error.py', 'Datos incorrectos', 'Ingrese un DPI valido'])
+        with open('Pantallas/profesores.txt') as filePrf:
+            leer = filePrf.read()
+            dpis = leer.split('\n')
+
+
+            for d in dpis:
+                print(d)
+                if d == dpi:
+                     validDpi = True
+            if validDpi:
+                NewCurso[1]  = dpi
+                NewCurso[2] = PrfEntry.get()
+                validarCupo()   
+            else:
+                subprocess.run(['python', 'Pantallas/error.py', 'Datos incorrectos', 'El DPI ingresado no esta asociado a ningun profesor'])
+                     
+                    
+
+            
              
 
 def validarNombre():
