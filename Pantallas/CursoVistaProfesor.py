@@ -28,6 +28,8 @@ def editarCurso():
 
 
 
+
+
 with open(F'Pantallas/Datos/Cursos/{nameCurso}.txt') as BaseDatos:
     lectura = BaseDatos.read()
     curso = lectura.split('///\n')
@@ -66,7 +68,9 @@ canvas.bind("<MouseWheel>", on_canvas_scroll)
 main = tk.Frame(vista, width  = 100,padx = 110)
 main.pack()
 
-tituloVs = tk.Label(master = main, font = tituloFont, text = titulo)
+
+
+tituloVs = tk.Label(master = main, font = tituloFont, text = titulo, justify = 'left', padx = 5)
 descripcionVs = tk.Label(master = main, font = textoFont, text = descripcion, width = 40)
 
 tituloVs.pack(pady = 20)
@@ -84,12 +88,16 @@ prfesor.pack(pady = 10)
 alumnosDataCtn = tk.Frame(main)
 alumnosDataCtn.pack()
 
+def cambiarNota(k):
+    subprocess.run(['python', 'Pantallas/editarNotas.py',nameCurso, k])
+
+
 for alumno in ALumnosData:
     alumno = alumno.split(':')
     alumnoCtn = tk.Frame(alumnosDataCtn, padx = 30, pady = 10, relief = 'solid', borderwidth = 1)
     alumnoCtn.pack(pady = 5, padx = 10)
-    textoCarnet = tk.Label(alumnoCtn, text = F'{alumno[0]}: {alumno[1]}', font = tituloFont)
-    textoCarnet.pack()
+    textoCarnet = tk.Button(alumnoCtn, text = F'{alumno[0]}:   {alumno[1]}', font = tituloFont, command = lambda k = alumno[0]: cambiarNota(k))
+    textoCarnet.pack(pady = 5)
     
 
 
@@ -97,8 +105,6 @@ for alumno in ALumnosData:
 editar = tk.Button(main, text = 'Editar Curso', command = editarCurso)
 editar.pack(pady = 50)
 
-editar = tk.Button(main, text = 'Editar Notas', command = editarCurso)
-editar.pack(pady = 50)
 
 canvas.create_window((0, 0), window= main, anchor='nw')
 
