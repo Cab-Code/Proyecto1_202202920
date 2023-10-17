@@ -10,11 +10,13 @@ argumentos = sys.argv
 carnet = argumentos[len(argumentos) - 1]
 
 DataProfesor = []
+crss = []
 
 with open(F'Pantallas/Datos/Profesores/{carnet}.txt') as Pbd:
     leer = Pbd.read()
     lectura = leer.split('///\n')
     DataProfesor = lectura[0].split(',')
+    crss = lectura[1]
 
 vista = tk.Tk()
 vista.geometry('300x400')
@@ -45,14 +47,15 @@ def reescribirData():
     alumnoD = ','.join(DataProfesor)
     alumnoNew.append(alumnoD)
     alumnoNew.append('///\n')
-    alumnoNew.append(DataProfesor)
+    alumnoNew.append(crss)
 
     alumnoNew = ''.join(alumnoNew)
     print(alumnoNew)
 
     with open(F'Pantallas/Datos/Profesores/{carnet}.txt', 'w') as data:
-        data.write(alumnoNew)
         print('Hola')
+        data.write(alumnoNew)
+
 
 
 def verificacion():
@@ -75,13 +78,14 @@ def verificacion():
             if char >= 97 and char <= 122:
                 validMin = 1
             print(char)
-        if validSimb == 1 and validNum == 1 and validMay == 1 and validMin == 1 and len(new) > 8:
+        if validSimb == 1 and validNum == 1 and validMay == 1 and validMin == 1 and len(new) >= 8:
             if new == conf:
                 new = bytes(new, 'utf-8')
                 NewEncriptedContra = bcrypt.hashpw(new, salt)
                 encriptedContra = str(NewEncriptedContra)
                 encriptedContra = encriptedContra[2:-1]
                 DataProfesor[6] = encriptedContra
+
                 reescribirData()
             else:
                 print('confirme su sontraseña correctamente')
@@ -95,7 +99,7 @@ def verificacion():
         subprocess.run(['python', 'Pantallas/error.py', 'Datos Incorrectos', 'Coloque su antigua contraseña'])
 
 
-btn = tk.Button(vista, text ='Guardar')
+btn = tk.Button(vista, text ='Guardar', command = verificacion)
 btn.pack()
 
 vista.mainloop()

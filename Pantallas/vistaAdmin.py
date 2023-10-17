@@ -22,7 +22,8 @@ def desbloquear():
     subprocess.run(['python', 'Pantallas/desbloqueador.py'])
 def crearCurso():
     subprocess.run(['python', 'Pantallas/CrearCurso.py'])
-
+def crearCurso():
+    subprocess.run(['python', 'Pantallas/EliminarCursos.py'])
 
 
 asignarMaestroCtn = tk.Frame(mainCtn)
@@ -39,6 +40,12 @@ CursoCtn = tk.Frame(mainCtn)
 CursoCtn.grid(column = 3, row = 1, padx = 50, pady = 200)
 CursoBtn = tk.Button(CursoCtn, font = textoFont, text = 'Crear Curso', command = crearCurso)
 CursoBtn.pack(pady = 50)
+
+CursoXCtn = tk.Frame(mainCtn)
+CursoXCtn.grid(column = 3, row = 1, padx = 50, pady = 200)
+CursoXBtn = tk.Button(CursoCtn, font = textoFont, text = 'Eliminar Curso', command = crearCurso)
+CursoXBtn.pack(pady = 50)
+
 
 
 

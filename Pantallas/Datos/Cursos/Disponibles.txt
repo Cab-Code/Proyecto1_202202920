@@ -1,8 +1,8 @@
+Sistemas de Control,1234567890123,Profesor-Profesor,44
 NombreCurso,DPIprofesor,NombreProfesor,79
 NombreCurso,DPIprofesor,NombreProfesor,99
 matematica,DPIprofesor,NombreProfesor,100
-Fisica,DPIprofesor,NombreProfesor,100
 NombreCurso,DPIprofesor,NombreProfesor,100
 NombreCurso,DPIprofesor,NombreProfesor,0
 NombreCurso,DPIprofesor,NombreProfesor,100
-Sistemas de Control,1234567890123,Profesor-Profesor,44
+Fisica,DPIprofesor,NombreProfesor,100
