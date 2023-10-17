@@ -6,7 +6,7 @@ import sys
 
 
 nameCurso = sys.argv[1]
-imgCurso = 'img0'
+
 
 
 vista = tk.Tk()
@@ -14,11 +14,11 @@ tituloFont = tkFont.Font(family = "Lucida Grande", size = 20)
 textoFont = tkFont.Font(family = "Lucida Grande", size = 12)
 vista.geometry('550x600')
 
+curso = ['descq', 'img0']
 
+imgCurso = 'img0'
 def asignarIMG(parm):
-    imgCurso = parm
-    print(imgCurso)
-
+    curso[1] = parm
 
 
 
@@ -44,7 +44,7 @@ def escribir():
         leer = FileDB.read()
         datos = leer.split('///\n')
         datos[1] = desc
-        datos[3] = imgCurso
+        datos[3] = curso[1]
         print(datos)
         Newdatos = '///\n'.join(datos)
         print(datos)

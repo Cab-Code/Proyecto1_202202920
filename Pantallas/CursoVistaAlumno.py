@@ -60,9 +60,26 @@ for curso in almPostCursos:
         print(i)
     i+=1
 
-EstudianteNota = tk.Label(master = vista, text = F'202202920\n\n Nota: {almPostCursos[1][1]}/100 pts', font = tituloFont)
-EstudianteNota.pack(pady = 10)
-print(almPostCursos)
+almNotaFCursos =['']
+
+with open(F'Pantallas/Datos/Cursos/{nameCurso}.txt') as CursoFileR:
+    leer = CursoFileR.read()
+    CrsData = leer.split('///\n')
+    AlmnsCrs = CrsData[4].split('\n')
+    print(AlmnsCrs)
+
+    for alumno in AlmnsCrs:
+        DatAlumno = alumno.split(':')
+        DatAlumno
+        if  carnet == DatAlumno[0]:
+            almNotaFCursos[0] = DatAlumno[1]
+            break
+        else:
+            almNotaFCursos[0] = DatAlumno[1]
+
+
+EstudianteNotaC = tk.Label(master = vista, text = F'{carnet}\n\n Nota: {almNotaFCursos[0]}/100 pts', font = tituloFont)
+EstudianteNotaC.pack(pady = 10)
 
 
 

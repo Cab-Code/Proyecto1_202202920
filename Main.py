@@ -124,8 +124,9 @@ def acceso(tipo, dat1, dat2, dat3):
             subprocess.run(['python', 'Pantallas/vistaProfesor.py', datosProfesor[0]])
         else:
             prfNew = []
+            BloqueoP = int(BloqueoP)
             BloqueoP+= 1
-            datosProfesor[7] = str(BloqueoA)
+            datosProfesor[7] = str(BloqueoP)
             print(datosProfesor)
             datosProfesor = ','.join(datosProfesor)
             print(datosProfesor)

@@ -42,6 +42,10 @@ def cerrarSecion():
     vista.destroy()
     subprocess.run(['python', '..\Proyecto/Main.py'])
     
+def camContra():
+    vista.destroy()
+    subprocess.run(['python', 'Pantallas/cambContra.py', carnet])
+    
 
 def usuarioConfig():
     subprocess.run(['python', 'Pantallas/configPrf.py', carnet])
@@ -85,6 +89,10 @@ def vistaCursos ():
 
     cerrarSecionBtn = tk.Button(master = cursosCtn, text = 'Cerrar Secion', command = cerrarSecion, font = textoFont, borderwidth=1, relief="solid", cursor = 'hand2')
     cerrarSecionBtn.grid(row = 2, column = 1)
+
+    contraBtn = tk.Button(master = cursosCtn, text = 'Cambiar Contraseña', command = camContra, font = textoFont, borderwidth=1, relief="solid", cursor = 'hand2')
+    contraBtn.grid(row = 1, column = 1, pady = 10)
+
 
 
 
