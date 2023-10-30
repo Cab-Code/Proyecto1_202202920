@@ -1,6 +1,7 @@
 import tkinter as tk
 import tkinter.font as tkFont
 import sys
+import os
 import subprocess
 
 vista = tk.Tk()
@@ -55,6 +56,7 @@ def rescribir():
 
 
 def eliminar(name):
+    os.remove(F'Pantallas/Datos/Cursos/{name}.txt')
     i = 0
     for cursos in cursosData:
         Crs = cursos.split(',')

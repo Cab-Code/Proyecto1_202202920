@@ -1,8 +1,6 @@
-Sistemas de Control,1234567890123,Profesor-Profesor,44
-NombreCurso,DPIprofesor,NombreProfesor,79
-NombreCurso,DPIprofesor,NombreProfesor,99
-matematica,DPIprofesor,NombreProfesor,100
-NombreCurso,DPIprofesor,NombreProfesor,100
-NombreCurso,DPIprofesor,NombreProfesor,0
-NombreCurso,DPIprofesor,NombreProfesor,100
-Fisica,DPIprofesor,NombreProfesor,100
+Matematica 1,3050227170117,Estuardo Cabrera,50
+Laboratorio 1,7894561230123,Jose Garcia,60
+Elect. industrial,3050227170117,Estuardo Cabrera,99
+Sistemas Neumaticos,3050227170117,Estuardo Cabrera,50
+Programacion,1234567890123,asdf asdf,50
+Prueba,1234567890123,asdf asdf,50

@@ -1,0 +1,3 @@
+7894561230123,Jose Andres,Garcia Robles,25637854,Profesor2@gmail.com,Jose Garcia,$2b$12$ASCDyiUrL20F696Dwg8Iw.bjJ.xKIhE1ScyWZK49n.Wskmu3cBuNO,0///
+Laboratorio
+Laboratorio 1

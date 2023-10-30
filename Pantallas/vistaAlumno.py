@@ -13,8 +13,6 @@ cursos = []
 carnet = argumentos[len(argumentos) - 1]
 
 BaseDatos = F'Pantallas/Datos/Alumnos/{carnet}.txt'
-
-
 with open(BaseDatos) as data:
     DataRead = data.read()
     alumno = DataRead.split('///\n')
@@ -43,18 +41,14 @@ interCt.pack()
 def cerrarSecion():
     vista.destroy()
     subprocess.run(['python', '..\Proyecto/Main.py'])
-    
 
 def masCursos():
     if len(cursos) < 12:
         subprocess.run(['python','Pantallas/CursosDisponibles.py', carnet])
     else:
         subprocess.run(['python', 'Pantallas/error.py','Sobre Carga De Cursos', 'No puedes asignarte mas de 12 cursos por semestre'])
-
 def usuarioConfig():
     subprocess.run(['python', 'Pantallas/configAlumno.py', carnet])
-    
-
 def abrirCurso(curso):
     enlace = F'Pantallas/CursoVistaAlumno.py'
     subprocess.run(['python', enlace,curso, carnet])
@@ -67,7 +61,6 @@ def inicio():
     userConfigBtn.pack()
 
 def vistaCursos ():
-    
     cursosCtn = tk.Frame(master = interCt)
     botonesCtn = tk.Frame(master = cursosCtn)
     text = tk.Label(master = cursosCtn, text = 'Cursos Asignados', font = tituloFont)

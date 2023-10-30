@@ -14,15 +14,13 @@ texto.pack()
 mainCtn = tk.Frame(vista)
 mainCtn.pack()
 
-
-
 def asignarMaestro():
     subprocess.run(['python', 'Pantallas/asigProfesor.py'])
 def desbloquear():
     subprocess.run(['python', 'Pantallas/desbloqueador.py'])
 def crearCurso():
     subprocess.run(['python', 'Pantallas/CrearCurso.py'])
-def crearCurso():
+def EliminarCurso():
     subprocess.run(['python', 'Pantallas/EliminarCursos.py'])
 
 
@@ -43,7 +41,7 @@ CursoBtn.pack(pady = 50)
 
 CursoXCtn = tk.Frame(mainCtn)
 CursoXCtn.grid(column = 3, row = 1, padx = 50, pady = 200)
-CursoXBtn = tk.Button(CursoCtn, font = textoFont, text = 'Eliminar Curso', command = crearCurso)
+CursoXBtn = tk.Button(CursoCtn, font = textoFont, text = 'Eliminar Curso', command = EliminarCurso)
 CursoXBtn.pack(pady = 50)
 
 

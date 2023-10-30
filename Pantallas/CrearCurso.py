@@ -57,15 +57,17 @@ def escribir():
     open(F'Pantallas/Datos/Cursos/{NewCurso[0]}.txt', 'w').close()
 
     with open(F'Pantallas/Datos/Cursos/{NewCurso[0]}.txt', 'w') as FileNewCurso:
-         DispFile.write(F'titulo///\nEsta es la descripcion del curso///\n{NewCurso[1]}///\nimg0///')
+         FileNewCurso.write(F'titulo///\nEsta es la descripcion del curso///\n{NewCurso[1]}///\nimg0///')
     
 
 def validarCupo():
     cupo = cupoEntry.get()
+    print(NewCurso)
     print(cupo)
     try:
         aus = int(cupo)
-        NewCurso[3] = str(aus)
+        NewCurso[3] = cupo
+        print(NewCurso)
         escribir()
         
     except:
@@ -73,7 +75,7 @@ def validarCupo():
 
 
 def validarDpi():
-    validDPI = False
+    validDpi = False
     dpi = DpiEntry.get()
     if len(dpi) == 13:
         try:

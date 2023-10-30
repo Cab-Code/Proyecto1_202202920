@@ -1,1 +1,5 @@
-3050227170117,Estuardo,Cabrera,54367890,correo@gmail.com,NombreUsuario,Contra,0///
+3050227170117,Estuardo,Cabrera,54367890,correo@gmail.com,NombreUsuario,$2b$12$ASCDyiUrL20F696Dwg8Iw./Fc9M41PdynAk3QY5quAbk8H7.MxAFG,0///
+matematica
+Matematica 1
+Elect. industrial
+Sistemas Neumaticos
