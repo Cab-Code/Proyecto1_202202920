@@ -52,7 +52,14 @@ with open(F'Pantallas/Datos/Alumnos/{carnet}.txt') as AlumnoBaseDatos:
     alumnoCursos = alumnoData[1]
     alumnoCursos = alumnoCursos.split('\n')
 
-def rescribir():
+def rescribir(arg):
+    cursDt = arg.split(',') 
+    print('-------------------------')
+    print(cursDt)
+    print('-------------------------')
+
+    with open(F'Pantallas/Datos/Cursos/{cursDt[0]}.txt', 'a') as Intu:
+        Intu.write(F'\n{carnet}:0')
     NewData = []
     NalumnoCursos = '\n'.join(alumnoCursos)
     NewData.append(alumnoDatos)
@@ -77,14 +84,14 @@ def asignar(i):
         aux = cursosData[i].split(',')
         aux[3] = int(aux[3]) - 1
         aux[3] = str(aux[3])
-
+         
         print(cursosData[i])
 
         cursosData[i] = ','.join(aux)
 
         print(cursosData[i])
 
-        rescribir()
+        rescribir(cursosData[i])
         
     else:
         subprocess.run(['python', 'Pantallas/error.py','Error de asignacion', 'El estudiante no se puede asignar mas de 12 cursos por semestre'])

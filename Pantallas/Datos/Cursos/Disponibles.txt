@@ -1,6 +1,6 @@
-Matematica 1,3050227170117,Estuardo Cabrera,50
-Laboratorio 1,7894561230123,Jose Garcia,60
-Elect. industrial,3050227170117,Estuardo Cabrera,99
-Sistemas Neumaticos,3050227170117,Estuardo Cabrera,50
-Programacion,1234567890123,asdf asdf,50
+Matematica 1,3050227170117,Estuardo Cabrera,48
+Laboratorio 1,7894561230123,Jose Garcia,56
+Elect. industrial,3050227170117,Estuardo Cabrera,93
+Sistemas Neumaticos,3050227170117,Estuardo Cabrera,49
+Programacion,1234567890123,asdf asdf,49
 Prueba,1234567890123,asdf asdf,50

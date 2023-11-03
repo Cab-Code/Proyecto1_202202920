@@ -14,6 +14,8 @@ prfClr = '#3f8880'
 admClr = '#9dc09d'
 extClr = '#a0fb0e'
 
+accesoRostroScan = [False]
+
 
 # Conteo para bloqueos de secion
 BloqueoA = 0
@@ -46,8 +48,17 @@ def Inicio (iniSecion):
     btnAlumno.pack(pady = 10)
     iniSecion.update()
 
+
+def scannearRostro():
+    subprocess.run(['python', 'Pantallas/rostrosComparador.py'])
+
 def acceso(tipo, dat1, dat2, dat3):
+    if accesoRostroScan[0] == False:
+            subprocess.run(['python', 'Pantallas/error.py', 'Ingrese sus datos', f'Debe realizar el analizis de rostro'])
+
     datosAlumno = []
+    print(dat1)
+    BloqueoA = 0
     
     if tipo == 'alumno':
         BaseDatos = F'Pantallas/Datos/Alumnos/{dat1}.txt'
@@ -204,6 +215,7 @@ def SecionAlumno (contenedor, admin, alumno, profesor, instruc):
     instruc['bg'] = almClr
 
     
+    scannerR = tk.Button(master =  contenedor, text = 'Escaneear Rostro', bg = extClr, relief = 'flat', command = scannearRostro)
 
     LabelA = tk.Label(master = contenedor, text = 'Carnet', bg = almClr, font = textoFont)
     getCarnet = tk.Entry(master = contenedor, width = 100, bg = BGclr, relief = 'flat', font = textoFont)
@@ -221,6 +233,7 @@ def SecionAlumno (contenedor, admin, alumno, profesor, instruc):
     getUserName.pack(pady = 5)
     LabelC.pack(pady = 5)
     getPassword.pack(pady = 10)
+    scannerR.pack()
 
     botones = tk.Frame(contenedor ,padx = 50, pady = 20, bg = almClr)
     botones.pack()

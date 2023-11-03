@@ -71,7 +71,7 @@ with open(F'Pantallas/Datos/Cursos/{nameCurso}.txt') as CursoFileR:
     for alumno in AlmnsCrs:
         DatAlumno = alumno.split(':')
         DatAlumno
-        if  carnet == DatAlumno[0]:
+        if  nameCurso == DatAlumno[0]:
             almNotaFCursos[0] = DatAlumno[1]
             break
         else:

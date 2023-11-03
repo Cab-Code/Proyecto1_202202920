@@ -1,1 +1,2 @@
-20232922,Josue,Garcia,1231231230123,4/12/2004,58976523,Josue Garcia,cor@df.com,$2b$12$ASCDyiUrL20F696Dwg8Iw.5TibXRAeUgUTu/MzPal1Z6Wy19eZ6Ei,0///
+20232922,Maria Fernanda,Pirir Jimenez,0000000000000,16/2/2004,12457896,Maria Pirir,correo@gmail.com,$2b$12$ASCDyiUrL20F696Dwg8Iw.5TibXRAeUgUTu/MzPal1Z6Wy19eZ6Ei,0///
+Introduccion Universitaria:50

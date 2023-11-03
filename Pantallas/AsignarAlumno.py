@@ -14,7 +14,9 @@ tituloFont = tkFont.Font(family = "Lucida Grande", size = 20)
 textoFont = tkFont.Font(family = "Lucida Grande", size = 12)
 
 carnets = []
-NewAlumnoData = ['', '', '', '', '', '', '', '', '', '0///']
+tempRostro = [False, False]
+
+NewAlumnoData = ['', '', '', '', '', '', '', '', '', '0///\nIntroduccion Universitaria:100']
 NuevoCarnet = 0
 def generarCarnet():
     subprocess.run(['Pantallas/OrdenadorCarnets.exe'])
@@ -97,18 +99,33 @@ confirmar.pack()
 contraN2Entry = tk.Entry(crdCtn, show = '*')
 contraN2Entry.pack()
 
+
+def callFacial():
+    subprocess.run(['python', 'Pantallas/registroRostro.py', str(NuevoCarnet)])
+    tempRostro[0] = True
+
+RecFacial = tk.Button(crdCtn,text = 'Registrar rostro', relief = 'solid', borderwidth = 1, command = callFacial)
+RecFacial.pack(pady = 5)
+
 def escribir():
-    NewData = ','.join(NewAlumnoData)
-    open(F'Pantallas/Datos/Alumnos/{NuevoCarnet}.txt', 'w').close()
+    if tempRostro[0]:
+        NewData = ','.join(NewAlumnoData)
+        open(F'Pantallas/Datos/Alumnos/{NuevoCarnet}.txt', 'w').close()
 
-    with open(F'Pantallas/Datos/Alumnos/{NuevoCarnet}.txt', 'w') as AlumnoFile:
-        AlumnoFile.write(NewData)
+        with open(F'Pantallas/Datos/Alumnos/{NuevoCarnet}.txt', 'w') as AlumnoFile:
+            AlumnoFile.write(NewData)
     
-    with open('Pantallas/carnets.txt', 'a') as carnetsFile:
-        carnetsFile.write(F'\n{NuevoCarnet}')
+        with open('Pantallas/carnets.txt', 'a') as carnetsFile:
+            carnetsFile.write(F'\n{NuevoCarnet}')
+        with open('Pantallas/Datos/Cursos/Introduccion Universitaria.txt', 'a') as Intu:
+            Intu.write(F'\n{NuevoCarnet}:100')
+        subprocess.run(['python', 'Pantallas/error.py', 'Asignacion correcta', F'Sus Datos Son:\n carnet: {NuevoCarnet}      Usuario: {NewAlumnoData[6]}'])
+        subprocess.run(['python', 'Pantallas/rostrosGrd.py', str(NuevoCarnet)])
+    
+        vista.destroy()
+    else:
+        subprocess.run(['python', 'Pantallas/error.py', 'Falta de datos', 'Debe registrar su rostro'])
 
-    subprocess.run(['python', 'Pantallas/error.py', 'Asignacion correcta', F'Sus Datos Son:\n carnet: {NuevoCarnet}      Usuario: {NewAlumnoData[6]}'])
-    vista.destroy()
 
 
 def validarContra():
@@ -230,6 +247,7 @@ def validarFecha():
 
 
 def validarDPI():
+    print(tempRostro[0])
     dpi = DpiEnt.get()
     validDpi = True
     try:
