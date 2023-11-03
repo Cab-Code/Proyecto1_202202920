@@ -50,12 +50,16 @@ def Inicio (iniSecion):
 
 
 def scannearRostro(carnet):
-    subprocess.run(['python', 'Pantallas/rostrosComparador.py', carnet])
+    print('------')
+    valid = subprocess.check_output(['python', 'Pantallas/rostrosComparador.py', carnet]).decode('utf-8').strip()
+    print('Recibido:',valid)
+    accesoRostroScan[0] = valid
+    #subprocess.run(['python', ])
 
 def acceso(tipo, dat1, dat2, dat3):
     if accesoRostroScan[0] == False:
             subprocess.run(['python', 'Pantallas/error.py', 'Ingrese sus datos', f'Debe realizar el analizis de rostro'])
-
+    print(accesoRostroScan[0])
     datosAlumno = []
     print(dat1)
     BloqueoA = 0
@@ -78,7 +82,7 @@ def acceso(tipo, dat1, dat2, dat3):
         contraseñaGet = bytes(dat3,'utf-8')
 
             
-        if datosAlumno[6] == dat2 and bcrypt.checkpw(contraseñaGet,contraseña):
+        if datosAlumno[6] == dat2 and bcrypt.checkpw(contraseñaGet,contraseña) and accesoRostroScan[0] == 'True':
             if BloqueoA >= 3:
                 subprocess.run(['python', 'Pantallas/error.py','X', 'Usuario Bloqueado " Pongase en contacto con el administrador"'])
                 return
