@@ -49,8 +49,8 @@ def Inicio (iniSecion):
     iniSecion.update()
 
 
-def scannearRostro():
-    subprocess.run(['python', 'Pantallas/rostrosComparador.py'])
+def scannearRostro(carnet):
+    subprocess.run(['python', 'Pantallas/rostrosComparador.py', carnet])
 
 def acceso(tipo, dat1, dat2, dat3):
     if accesoRostroScan[0] == False:
@@ -215,11 +215,11 @@ def SecionAlumno (contenedor, admin, alumno, profesor, instruc):
     instruc['bg'] = almClr
 
     
-    scannerR = tk.Button(master =  contenedor, text = 'Escaneear Rostro', bg = extClr, relief = 'flat', command = scannearRostro)
+   
 
     LabelA = tk.Label(master = contenedor, text = 'Carnet', bg = almClr, font = textoFont)
     getCarnet = tk.Entry(master = contenedor, width = 100, bg = BGclr, relief = 'flat', font = textoFont)
-
+    scannerR = tk.Button(master =  contenedor, text = 'Escaneear Rostro', bg = extClr, relief = 'flat', command = lambda:scannearRostro(getCarnet.get()))
     LabelB = tk.Label(master = contenedor, text = 'Nombre de Usuario', bg ='#20c67c', font = textoFont)
     getUserName = tk.Entry(master = contenedor, width = 100, bg = BGclr, relief = 'flat', font = textoFont)
 

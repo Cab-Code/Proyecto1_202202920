@@ -2,14 +2,15 @@ import face_recognition
 import sys
 import os
 import pickle
+import shutil
 
 carnet = sys.argv[1]
 
 ruta_actual = os.getcwd()
 
 
-destino = F"{ruta_actual}\\Pantallas\\Datos\\imagenes\\ImgRegistros\\{carnet}"
-ruta_imagenes_persona = destino  # Cambia la ruta según tu estructura de carpetas
+destino = F"{ruta_actual}\\Pantallas\\Datos\\imagenes\\ImgRegistros"
+ruta_imagenes_persona = destino + '\\temp'  # Cambia la ruta según tu estructura de carpetas
 
 # Inicializar listas para almacenar las codificaciones y etiquetas
 codificaciones = []
@@ -31,7 +32,9 @@ for nombre_imagen in os.listdir(ruta_imagenes_persona):
 datos = {"codificaciones": codificaciones, "etiquetas": etiquetas}
 
 # Guardar el modelo en un archivo .pkl
-with open(F"modelo-{carnet}.pkl", "wb") as archivo:
+with open(F"{destino}\\{carnet}modelo.pkl", "wb") as archivo:
     pickle.dump(datos, archivo)
 
 print("Modelo de reconocimiento facial creado y guardado en modelo_persona.pkl")
+
+shutil.rmtree(ruta_imagenes_persona)
