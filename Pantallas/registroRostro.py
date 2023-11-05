@@ -36,6 +36,7 @@ while True:
 	frame =  imutils.resize(frame, width=640)
 	gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
 	auxFrame = frame.copy()
+	
 
 	faces = faceClassif.detectMultiScale(gray,1.3,5)
 

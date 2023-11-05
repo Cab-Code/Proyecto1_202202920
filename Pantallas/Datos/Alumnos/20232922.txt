@@ -1,2 +1,2 @@
-20232922,Maria Fernanda,Pirir Jimenez,0000000000000,16/2/2004,12457896,Maria Pirir,correo@gmail.com,$2b$12$ASCDyiUrL20F696Dwg8Iw.5TibXRAeUgUTu/MzPal1Z6Wy19eZ6Ei,0///
-Introduccion Universitaria:50
+20232922,Emma,Stone,4564564564564,06/09/1988,77445566,Emma Stone,EmmaSt@hotmail.com,$2b$12$ASCDyiUrL20F696Dwg8Iw.5TibXRAeUgUTu/MzPal1Z6Wy19eZ6Ei,0///
+Introduccion Universitaria:100
